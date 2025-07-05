@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, X, Map, Users, Brain, Compass } from "lucide-react";
+import { Menu, X, Map, Users, Brain, Compass, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface NavigationProps {
@@ -16,6 +16,7 @@ export default function Navigation({
   const navItems = [
     { id: "mapa", label: "Mapa Interactivo", icon: Map },
     { id: "testimonios", label: "Testimonios", icon: Users },
+    { id: "timeline", label: "Línea de Tiempo", icon: Clock },
     { id: "exploracion", label: "Exploración Guiada", icon: Compass },
     { id: "trivia", label: "Trivia Educativa", icon: Brain },
   ];

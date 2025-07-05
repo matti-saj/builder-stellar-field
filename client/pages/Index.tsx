@@ -6,7 +6,15 @@ import InteractiveMap from "@/components/InteractiveMap";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import ExplorationMode from "@/components/ExplorationMode";
 import TriviaSection from "@/components/TriviaSection";
-import { ChevronDown, MapPin, Users, Compass, Brain } from "lucide-react";
+import Timeline from "@/components/Timeline";
+import {
+  ChevronDown,
+  MapPin,
+  Users,
+  Compass,
+  Brain,
+  Clock,
+} from "lucide-react";
 
 export default function Index() {
   const [activeSection, setActiveSection] = useState("inicio");
@@ -24,7 +32,13 @@ export default function Index() {
   // Update active section on scroll
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["mapa", "testimonios", "exploracion", "trivia"];
+      const sections = [
+        "mapa",
+        "testimonios",
+        "timeline",
+        "exploracion",
+        "trivia",
+      ];
       const scrollPosition = window.scrollY + 200;
 
       for (const section of sections) {
@@ -78,7 +92,7 @@ export default function Index() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-6 mb-12">
             {[
               {
                 icon: MapPin,
@@ -91,6 +105,12 @@ export default function Index() {
                 title: "Testimonios Orales",
                 description: "Escucha voces de las comunidades",
                 color: "bg-cactus",
+              },
+              {
+                icon: Clock,
+                title: "Línea de Tiempo",
+                description: "Descubre la historia cronológica",
+                color: "bg-accent",
               },
               {
                 icon: Compass,
@@ -214,6 +234,7 @@ export default function Index() {
       {/* Main Sections */}
       <InteractiveMap />
       <TestimonialsSection />
+      <Timeline />
       <ExplorationMode />
       <TriviaSection />
 
@@ -260,6 +281,14 @@ export default function Index() {
                     className="hover:text-primary transition-colors"
                   >
                     Testimonios Orales
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => handleSectionClick("timeline")}
+                    className="hover:text-primary transition-colors"
+                  >
+                    Línea de Tiempo
                   </button>
                 </li>
                 <li>
