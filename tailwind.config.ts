@@ -57,6 +57,22 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        clay: {
+          DEFAULT: "hsl(var(--clay))",
+          foreground: "hsl(var(--clay-foreground))",
+        },
+        stone: {
+          DEFAULT: "hsl(var(--stone))",
+          foreground: "hsl(var(--stone-foreground))",
+        },
+        cactus: {
+          DEFAULT: "hsl(var(--cactus))",
+          foreground: "hsl(var(--cactus-foreground))",
+        },
+        sand: {
+          DEFAULT: "hsl(var(--sand))",
+          foreground: "hsl(var(--sand-foreground))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
