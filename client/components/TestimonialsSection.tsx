@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Play, Pause, Filter, Users } from "lucide-react";
+import PlaceholderImage from "@/components/PlaceholderImage";
 
 interface Testimony {
   id: string;
@@ -168,10 +169,10 @@ export default function TestimonialsSection() {
               className="overflow-hidden hover:shadow-lg transition-shadow"
             >
               <div className="relative h-48 bg-muted">
-                <img
+                <PlaceholderImage
                   src={testimony.image}
                   alt={testimony.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 <Button
