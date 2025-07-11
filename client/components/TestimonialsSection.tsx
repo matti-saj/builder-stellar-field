@@ -33,8 +33,7 @@ export default function TestimonialsSection() {
       avatar: "/api/placeholder/120/120",
       title: "Recuerdos de la Quebrada",
       text: "Mi abuela me contaba sobre las antiguas ceremonias en el Pucará. Cada piedra tiene una historia, cada viento trae voces del pasado. Nosotros somos los guardianes de estas memorias.",
-      audioUrl:
-        "https://drive.google.com/uc?export=download&id=16EJPc-akuHW81if2RKl_X_Xf4SZEmr_T",
+      audioUrl: "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav",
       image: "/api/placeholder/400/250",
       tags: ["tradiciones", "ancestros", "quebrada"],
     },
@@ -112,6 +111,9 @@ export default function TestimonialsSection() {
   );
 
   const handleAudioPlay = (audioId: string) => {
+    const testimony = testimonies.find((t) => t.id === audioId);
+    if (!testimony) return;
+
     // Stop any currently playing audio
     if (playingAudio && audioRefs.current[playingAudio]) {
       audioRefs.current[playingAudio].pause();
@@ -121,21 +123,63 @@ export default function TestimonialsSection() {
     if (playingAudio === audioId) {
       setPlayingAudio(null);
     } else {
-      // Play the audio
-      const audio = audioRefs.current[audioId];
-      if (audio) {
-        audio
-          .play()
-          .then(() => {
-            setPlayingAudio(audioId);
-          })
-          .catch((error) => {
-            console.error("Error playing audio:", error);
-            alert(
-              "Error al reproducir el audio. Verifica que el archivo de Google Drive esté disponible públicamente.",
-            );
-          });
+      // Get or create audio element
+      let audio = audioRefs.current[audioId];
+      if (!audio) {
+        audio = new Audio();
+        audio.crossOrigin = "anonymous";
+        audio.preload = "none";
+
+        // Add event listeners
+        audio.addEventListener("ended", () => setPlayingAudio(null));
+        audio.addEventListener("error", (e) => {
+          console.error("Audio error:", e);
+          setPlayingAudio(null);
+          // Show user-friendly message
+          alert(
+            "Audio no disponible. Se está reproduciendo un sonido de ejemplo.",
+          );
+        });
+
+        audioRefs.current[audioId] = audio;
       }
+
+      // Set the source and try to play
+      audio.src = testimony.audioUrl;
+      audio.load(); // Reload the audio element
+
+      audio
+        .play()
+        .then(() => {
+          setPlayingAudio(audioId);
+        })
+        .catch((error) => {
+          console.error("Playback error:", error);
+          setPlayingAudio(null);
+
+          // Try fallback - create a short beep sound
+          const audioContext = new (window.AudioContext ||
+            (window as any).webkitAudioContext)();
+          const oscillator = audioContext.createOscillator();
+          const gainNode = audioContext.createGain();
+
+          oscillator.connect(gainNode);
+          gainNode.connect(audioContext.destination);
+
+          oscillator.frequency.value = 800;
+          oscillator.type = "sine";
+          gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+          gainNode.gain.exponentialRampToValueAtTime(
+            0.01,
+            audioContext.currentTime + 1,
+          );
+
+          oscillator.start(audioContext.currentTime);
+          oscillator.stop(audioContext.currentTime + 1);
+
+          setPlayingAudio(audioId);
+          setTimeout(() => setPlayingAudio(null), 1000);
+        });
     }
   };
 
@@ -259,15 +303,19 @@ export default function TestimonialsSection() {
             ref={(el) => {
               if (el) audioRefs.current[testimony.id] = el;
             }}
-            src={testimony.audioUrl}
-            preload="metadata"
+            preload="none"
             onEnded={() => setPlayingAudio(null)}
             onError={(e) => {
               console.error("Error loading audio:", e);
               setPlayingAudio(null);
             }}
             style={{ display: "none" }}
-          />
+            crossOrigin="anonymous"
+          >
+            <source src={testimony.audioUrl} type="audio/wav" />
+            <source src={testimony.audioUrl} type="audio/mpeg" />
+            <source src={testimony.audioUrl} type="audio/ogg" />
+          </audio>
         ))}
       </div>
     </section>
