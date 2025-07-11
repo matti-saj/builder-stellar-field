@@ -268,6 +268,24 @@ export default function TestimonialsSection() {
             </p>
           </div>
         )}
+
+        {/* Hidden audio elements for better browser compatibility */}
+        {testimonies.map((testimony) => (
+          <audio
+            key={`audio-${testimony.id}`}
+            ref={(el) => {
+              if (el) audioRefs.current[testimony.id] = el;
+            }}
+            src={testimony.audioUrl}
+            preload="metadata"
+            onEnded={() => setPlayingAudio(null)}
+            onError={(e) => {
+              console.error("Error loading audio:", e);
+              setPlayingAudio(null);
+            }}
+            style={{ display: "none" }}
+          />
+        ))}
       </div>
     </section>
   );
