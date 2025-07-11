@@ -8,6 +8,7 @@ import ExplorationMode from "@/components/ExplorationMode";
 import TriviaSection from "@/components/TriviaSection";
 import Timeline from "@/components/Timeline";
 import ImageCarousel from "@/components/ImageCarousel";
+import YouTubeVideo from "@/components/YouTubeVideo";
 import {
   ChevronDown,
   MapPin,
@@ -221,21 +222,11 @@ export default function Index() {
               </ul>
             </div>
             <div className="relative">
-              <div className="aspect-square bg-gradient-to-br from-primary/20 to-cactus/20 rounded-2xl p-8">
-                <div className="w-full h-full bg-card rounded-xl shadow-lg flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="w-16 h-16 bg-primary text-primary-foreground rounded-full flex items-center justify-center mx-auto mb-4">
-                      <MapPin className="w-8 h-8" />
-                    </div>
-                    <h3 className="text-xl font-semibold text-foreground mb-2">
-                      Patrimonio Vivo
-                    </h3>
-                    <p className="text-muted-foreground">
-                      Conectando generaciones a través de la tradición oral
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <YouTubeVideo
+                videoId="Fh15x7BkvJ4"
+                title="Patrimonio Cultural de Jujuy - Tradiciones Ancestrales"
+                className="w-full"
+              />
             </div>
           </div>
         </div>
