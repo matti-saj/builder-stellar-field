@@ -33,7 +33,8 @@ export default function TestimonialsSection() {
       avatar: "/api/placeholder/120/120",
       title: "Recuerdos de la Quebrada",
       text: "Mi abuela me contaba sobre las antiguas ceremonias en el Pucará. Cada piedra tiene una historia, cada viento trae voces del pasado. Nosotros somos los guardianes de estas memorias.",
-      audioUrl: "synthetic", // Will generate synthetic audio
+      audioUrl:
+        "https://drive.google.com/uc?export=download&id=16EJPc-akuHW81if2RKl_X_Xf4SZEmr_T",
       image: "/api/placeholder/400/250",
       tags: ["tradiciones", "ancestros", "quebrada"],
     },
@@ -111,85 +112,127 @@ export default function TestimonialsSection() {
   );
 
   const handleAudioPlay = (audioId: string) => {
+    const testimony = testimonies.find((t) => t.id === audioId);
+    if (!testimony) return;
+
     // Stop any currently playing audio
-    if (playingAudio) {
+    if (playingAudio && audioRefs.current[playingAudio]) {
+      const currentAudio = audioRefs.current[playingAudio];
+      if (currentAudio.pause) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+      }
+    }
+
+    if (playingAudio === audioId) {
       setPlayingAudio(null);
       return;
     }
 
-    try {
-      // Create Web Audio API context for synthetic audio
-      const audioContext = new (window.AudioContext ||
-        (window as any).webkitAudioContext)();
+    // For the first testimony (Recuerdos de la Quebrada), try to play the real audio
+    if (audioId === "1" && testimony.audioUrl !== "synthetic") {
+      // Create or get audio element
+      if (!audioRefs.current[audioId]) {
+        const audio = new Audio();
+        audio.crossOrigin = "anonymous";
+        audio.preload = "metadata";
 
-      // Create a pleasant chime sound to represent the audio testimony
-      const duration = 3; // 3 seconds
-      const frequency1 = 523.25; // C5
-      const frequency2 = 659.25; // E5
-      const frequency3 = 783.99; // G5
+        audio.addEventListener("ended", () => setPlayingAudio(null));
+        audio.addEventListener("loadstart", () =>
+          console.log("Starting to load audio..."),
+        );
+        audio.addEventListener("canplaythrough", () =>
+          console.log("Audio can play through"),
+        );
+        audio.addEventListener("error", (e) => {
+          console.error("Audio error:", e);
+          setPlayingAudio(null);
+          alert(
+            "No se pudo cargar el audio de Google Drive. Asegúrate de que el archivo esté compartido públicamente.",
+          );
+        });
 
-      // Create oscillators for harmony
-      const osc1 = audioContext.createOscillator();
-      const osc2 = audioContext.createOscillator();
-      const osc3 = audioContext.createOscillator();
+        audioRefs.current[audioId] = audio;
+      }
 
-      // Create gain nodes for volume control
-      const gain1 = audioContext.createGain();
-      const gain2 = audioContext.createGain();
-      const gain3 = audioContext.createGain();
-      const masterGain = audioContext.createGain();
+      const audio = audioRefs.current[audioId];
+      audio.src = testimony.audioUrl;
 
-      // Connect nodes
-      osc1.connect(gain1);
-      osc2.connect(gain2);
-      osc3.connect(gain3);
-      gain1.connect(masterGain);
-      gain2.connect(masterGain);
-      gain3.connect(masterGain);
-      masterGain.connect(audioContext.destination);
+      audio
+        .play()
+        .then(() => {
+          setPlayingAudio(audioId);
+          console.log("Playing Google Drive audio successfully");
+        })
+        .catch((error) => {
+          console.error("Error playing Google Drive audio:", error);
+          alert(
+            "Error al reproducir el audio. Verifica que el archivo de Google Drive esté disponible públicamente.",
+          );
+        });
+    } else {
+      // For other testimonies or fallback, use synthetic audio
+      try {
+        const audioContext = new (window.AudioContext ||
+          (window as any).webkitAudioContext)();
 
-      // Set frequencies
-      osc1.frequency.value = frequency1;
-      osc2.frequency.value = frequency2;
-      osc3.frequency.value = frequency3;
+        const duration = 3;
+        const frequency1 = 523.25; // C5
+        const frequency2 = 659.25; // E5
+        const frequency3 = 783.99; // G5
 
-      // Set oscillator types
-      osc1.type = "sine";
-      osc2.type = "sine";
-      osc3.type = "sine";
+        const osc1 = audioContext.createOscillator();
+        const osc2 = audioContext.createOscillator();
+        const osc3 = audioContext.createOscillator();
 
-      // Create envelope (fade in and out)
-      const now = audioContext.currentTime;
-      masterGain.gain.setValueAtTime(0, now);
-      masterGain.gain.linearRampToValueAtTime(0.2, now + 0.1);
-      masterGain.gain.linearRampToValueAtTime(0.2, now + duration - 0.5);
-      masterGain.gain.linearRampToValueAtTime(0, now + duration);
+        const gain1 = audioContext.createGain();
+        const gain2 = audioContext.createGain();
+        const gain3 = audioContext.createGain();
+        const masterGain = audioContext.createGain();
 
-      // Individual gains for harmony
-      gain1.gain.setValueAtTime(0.4, now);
-      gain2.gain.setValueAtTime(0.3, now);
-      gain3.gain.setValueAtTime(0.2, now);
+        osc1.connect(gain1);
+        osc2.connect(gain2);
+        osc3.connect(gain3);
+        gain1.connect(masterGain);
+        gain2.connect(masterGain);
+        gain3.connect(masterGain);
+        masterGain.connect(audioContext.destination);
 
-      // Start oscillators
-      osc1.start(now);
-      osc2.start(now);
-      osc3.start(now);
+        osc1.frequency.value = frequency1;
+        osc2.frequency.value = frequency2;
+        osc3.frequency.value = frequency3;
 
-      // Stop oscillators
-      osc1.stop(now + duration);
-      osc2.stop(now + duration);
-      osc3.stop(now + duration);
+        osc1.type = "sine";
+        osc2.type = "sine";
+        osc3.type = "sine";
 
-      // Update state
-      setPlayingAudio(audioId);
+        const now = audioContext.currentTime;
+        masterGain.gain.setValueAtTime(0, now);
+        masterGain.gain.linearRampToValueAtTime(0.2, now + 0.1);
+        masterGain.gain.linearRampToValueAtTime(0.2, now + duration - 0.5);
+        masterGain.gain.linearRampToValueAtTime(0, now + duration);
 
-      // Reset state when audio ends
-      setTimeout(() => {
-        setPlayingAudio(null);
-      }, duration * 1000);
-    } catch (error) {
-      console.error("Error creating synthetic audio:", error);
-      alert("Audio no disponible en este navegador.");
+        gain1.gain.setValueAtTime(0.4, now);
+        gain2.gain.setValueAtTime(0.3, now);
+        gain3.gain.setValueAtTime(0.2, now);
+
+        osc1.start(now);
+        osc2.start(now);
+        osc3.start(now);
+
+        osc1.stop(now + duration);
+        osc2.stop(now + duration);
+        osc3.stop(now + duration);
+
+        setPlayingAudio(audioId);
+
+        setTimeout(() => {
+          setPlayingAudio(null);
+        }, duration * 1000);
+      } catch (error) {
+        console.error("Error creating synthetic audio:", error);
+        alert("Audio no disponible en este navegador.");
+      }
     }
   };
 
