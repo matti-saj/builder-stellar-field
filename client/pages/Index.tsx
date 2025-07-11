@@ -84,11 +84,11 @@ export default function Index() {
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           {/* Header Image */}
           <div className="mb-8">
-            <div className="relative max-w-4xl mx-auto mb-8">
+            <div className="relative w-full mb-8">
               <PlaceholderImage
-                src="/api/placeholder/1200/400"
+                src="/api/placeholder/1600/600"
                 alt="Paisaje cultural de Jujuy - Quebrada de Humahuaca"
-                className="w-full h-64 md:h-80 lg:h-96 rounded-2xl shadow-2xl"
+                className="w-full h-72 md:h-96 lg:h-[500px] rounded-2xl shadow-2xl"
                 fallbackContent={
                   <div className="text-center text-stone-foreground">
                     <div className="w-24 h-24 mx-auto mb-4 opacity-60">
