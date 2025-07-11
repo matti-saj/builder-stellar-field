@@ -349,7 +349,27 @@ export default function TestimonialsSection() {
           </div>
         )}
 
-        {/* Audio is generated synthetically using Web Audio API */}
+        {/* Audio element for Google Drive file */}
+        {testimonies
+          .filter((t) => t.id === "1")
+          .map((testimony) => (
+            <audio
+              key={`audio-${testimony.id}`}
+              ref={(el) => {
+                if (el) audioRefs.current[testimony.id] = el;
+              }}
+              preload="metadata"
+              onEnded={() => setPlayingAudio(null)}
+              onError={(e) => {
+                console.error("Error loading Google Drive audio:", e);
+                setPlayingAudio(null);
+              }}
+              onLoadStart={() => console.log("Loading Google Drive audio...")}
+              onCanPlay={() => console.log("Google Drive audio ready to play")}
+              style={{ display: "none" }}
+              crossOrigin="anonymous"
+            />
+          ))}
       </div>
     </section>
   );
