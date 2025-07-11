@@ -112,9 +112,6 @@ export default function TestimonialsSection() {
   );
 
   const handleAudioPlay = (audioId: string) => {
-    const testimony = testimonies.find((t) => t.id === audioId);
-    if (!testimony) return;
-
     // Stop any currently playing audio
     if (playingAudio && audioRefs.current[playingAudio]) {
       audioRefs.current[playingAudio].pause();
@@ -124,35 +121,21 @@ export default function TestimonialsSection() {
     if (playingAudio === audioId) {
       setPlayingAudio(null);
     } else {
-      // Create audio element if it doesn't exist
-      if (!audioRefs.current[audioId]) {
-        const audio = new Audio(testimony.audioUrl);
-        audio.addEventListener("ended", () => {
-          setPlayingAudio(null);
-        });
-        audio.addEventListener("error", (e) => {
-          console.error("Error loading audio:", e);
-          alert(
-            "Error al cargar el audio. Verifica que el archivo esté disponible.",
-          );
-          setPlayingAudio(null);
-        });
-        audioRefs.current[audioId] = audio;
-      }
-
       // Play the audio
       const audio = audioRefs.current[audioId];
-      audio
-        .play()
-        .then(() => {
-          setPlayingAudio(audioId);
-        })
-        .catch((error) => {
-          console.error("Error playing audio:", error);
-          alert(
-            "Error al reproducir el audio. Verifica que el archivo esté disponible.",
-          );
-        });
+      if (audio) {
+        audio
+          .play()
+          .then(() => {
+            setPlayingAudio(audioId);
+          })
+          .catch((error) => {
+            console.error("Error playing audio:", error);
+            alert(
+              "Error al reproducir el audio. Verifica que el archivo de Google Drive esté disponible públicamente.",
+            );
+          });
+      }
     }
   };
 
