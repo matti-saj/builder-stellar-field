@@ -1,12 +1,4 @@
-import { useState, useEffect } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  LayersControl,
-} from "react-leaflet";
-import L from "leaflet";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -19,17 +11,6 @@ import {
   MapPin,
   Layers,
 } from "lucide-react";
-
-// Fix for default markers in react-leaflet
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
-  iconUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
-  shadowUrl:
-    "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
-});
 
 interface MapPoint {
   id: string;
@@ -196,57 +177,31 @@ export default function LeafletMap() {
     return mapPoints.filter((point) => activeTypes.includes(point.tipo));
   };
 
-  const createCustomIcon = (tipo: string) => {
-    let color = "#3b82f6"; // default blue
+  const getMarkerColor = (tipo: string) => {
     switch (tipo) {
       case "relato":
-        color = "#15803d"; // cactus green
-        break;
+        return "bg-cactus";
       case "conflicto":
-        color = "#dc2626"; // destructive red
-        break;
+        return "bg-destructive";
       case "ruta":
-        color = "#78716c"; // stone
-        break;
+        return "bg-stone";
+      default:
+        return "bg-primary";
     }
-
-    return L.divIcon({
-      className: "custom-marker",
-      html: `
-        <div style="
-          background-color: ${color};
-          width: 30px;
-          height: 30px;
-          border-radius: 50%;
-          border: 3px solid white;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 14px;
-          color: white;
-          font-weight: bold;
-        ">
-          ${tipo === "relato" ? "🎤" : tipo === "conflicto" ? "⚠️" : "🛤️"}
-        </div>
-      `,
-      iconSize: [30, 30],
-      iconAnchor: [15, 15],
-      popupAnchor: [0, -15],
-    });
   };
 
-  // Add CSS for Leaflet
-  useEffect(() => {
-    const link = document.createElement("link");
-    link.rel = "stylesheet";
-    link.href = "https://unpkg.com/leaflet@1.7.1/dist/leaflet.css";
-    document.head.appendChild(link);
-
-    return () => {
-      document.head.removeChild(link);
-    };
-  }, []);
+  const getMarkerIcon = (tipo: string) => {
+    switch (tipo) {
+      case "relato":
+        return "🎤";
+      case "conflicto":
+        return "⚠️";
+      case "ruta":
+        return "🛤️";
+      default:
+        return "📍";
+    }
+  };
 
   return (
     <section id="mapa" className="py-16 bg-background">
@@ -338,48 +293,107 @@ export default function LeafletMap() {
           <div className="lg:col-span-3">
             <Card className="overflow-hidden">
               <CardContent className="p-0">
-                <div style={{ height: "600px", width: "100%" }}>
-                  <MapContainer
-                    center={[-24.1858, -65.2995]}
-                    zoom={8}
-                    style={{ height: "100%", width: "100%" }}
-                  >
-                    <TileLayer
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                      attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    />
-                    {getActivePoints().map((point) => (
-                      <Marker
+                <div className="relative h-96 lg:h-[600px] bg-gradient-to-br from-sand to-stone/20 rounded-lg overflow-hidden">
+                  {/* Map Background - Stylized representation of Jujuy */}
+                  <div className="absolute inset-0 opacity-30">
+                    <svg
+                      viewBox="0 0 100 100"
+                      className="w-full h-full"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      {/* Mountains */}
+                      <path
+                        d="M0,80 L20,40 L40,60 L60,30 L80,50 L100,20 L100,100 L0,100 Z"
+                        fill="hsl(var(--stone))"
+                        opacity="0.6"
+                      />
+                      {/* Rivers */}
+                      <path
+                        d="M10,70 Q30,65 50,70 T90,75"
+                        stroke="hsl(var(--primary))"
+                        strokeWidth="0.5"
+                        fill="none"
+                        opacity="0.8"
+                      />
+                      {/* Quebrada de Humahuaca */}
+                      <path
+                        d="M15,45 Q35,40 55,45 Q75,50 85,45"
+                        stroke="hsl(var(--cactus))"
+                        strokeWidth="1"
+                        fill="none"
+                        opacity="0.9"
+                      />
+                    </svg>
+                  </div>
+
+                  {/* Map Attribution */}
+                  <div className="absolute bottom-2 right-2 bg-black/50 text-white text-xs px-2 py-1 rounded">
+                    Mapa interactivo de Jujuy
+                  </div>
+
+                  {/* Convert coordinates to percentage positions for display */}
+                  {getActivePoints().map((point) => {
+                    // Simple coordinate conversion for display
+                    // Jujuy bounds approximately: lat -21.5 to -24.5, lng -63.5 to -66.5
+                    const x = ((point.coords[1] + 66.5) / 3) * 100; // longitude to x
+                    const y = ((24.5 - point.coords[0]) / 3) * 100; // latitude to y (inverted)
+
+                    return (
+                      <button
                         key={point.id}
-                        position={point.coords}
-                        icon={createCustomIcon(point.tipo)}
-                        eventHandlers={{
-                          click: () => setSelectedPoint(point),
+                        onClick={() => setSelectedPoint(point)}
+                        className={`absolute transform -translate-x-1/2 -translate-y-1/2 ${getMarkerColor(
+                          point.tipo,
+                        )} text-white rounded-full p-3 hover:scale-110 transition-all duration-300 shadow-lg border-2 border-white`}
+                        style={{
+                          left: `${Math.max(10, Math.min(90, x))}%`,
+                          top: `${Math.max(10, Math.min(90, y))}%`,
                         }}
+                        title={point.nombre}
                       >
-                        <Popup>
-                          <div className="p-2">
-                            <div className="flex items-center space-x-2 mb-2">
-                              <Badge variant="secondary" className="text-xs">
-                                {point.tipo}
-                              </Badge>
-                            </div>
-                            <h4 className="font-semibold mb-1">
-                              {point.nombre}
-                            </h4>
-                            <p className="text-sm text-gray-600 mb-2">
-                              {point.descripcion}
-                            </p>
-                            {point.detalles && (
-                              <p className="text-xs text-gray-500">
-                                {point.detalles}
-                              </p>
-                            )}
+                        <span className="text-sm">
+                          {getMarkerIcon(point.tipo)}
+                        </span>
+                      </button>
+                    );
+                  })}
+
+                  {/* Info Card for Selected Point */}
+                  {selectedPoint && (
+                    <div className="absolute top-4 left-4 right-4 z-10 bg-card border border-border rounded-lg p-4 shadow-lg max-w-sm">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center space-x-2 mb-2">
+                            <Badge variant="secondary" className="text-xs">
+                              {selectedPoint.tipo}
+                            </Badge>
                           </div>
-                        </Popup>
-                      </Marker>
-                    ))}
-                  </MapContainer>
+                          <h4 className="font-semibold text-foreground mb-1">
+                            {selectedPoint.nombre}
+                          </h4>
+                          <p className="text-sm text-muted-foreground mb-2">
+                            {selectedPoint.descripcion}
+                          </p>
+                          {selectedPoint.detalles && (
+                            <p className="text-xs text-muted-foreground">
+                              {selectedPoint.detalles}
+                            </p>
+                          )}
+                        </div>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedPoint(null);
+                          }}
+                          className="p-1"
+                        >
+                          ×
+                        </Button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
