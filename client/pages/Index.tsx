@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Navigation from "@/components/Navigation";
-import InteractiveMap from "@/components/InteractiveMap";
+import LeafletMap from "@/components/LeafletMap";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import ExplorationMode from "@/components/ExplorationMode";
 import TriviaSection from "@/components/TriviaSection";
@@ -233,7 +233,7 @@ export default function Index() {
       </section>
 
       {/* Main Sections */}
-      <InteractiveMap />
+      <LeafletMap />
       <TestimonialsSection />
       <Timeline />
       <ExplorationMode />
