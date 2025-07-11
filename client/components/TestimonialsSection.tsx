@@ -33,7 +33,8 @@ export default function TestimonialsSection() {
       avatar: "/api/placeholder/120/120",
       title: "Recuerdos de la Quebrada",
       text: "Mi abuela me contaba sobre las antiguas ceremonias en el Pucará. Cada piedra tiene una historia, cada viento trae voces del pasado. Nosotros somos los guardianes de estas memorias.",
-      audioUrl: "data:audio/wav;base64,", // Mock audio URL
+      audioUrl:
+        "https://drive.google.com/uc?export=download&id=16EJPc-akuHW81if2RKl_X_Xf4SZEmr_T",
       image: "/api/placeholder/400/250",
       tags: ["tradiciones", "ancestros", "quebrada"],
     },
@@ -111,6 +112,9 @@ export default function TestimonialsSection() {
   );
 
   const handleAudioPlay = (audioId: string) => {
+    const testimony = testimonies.find((t) => t.id === audioId);
+    if (!testimony) return;
+
     // Stop any currently playing audio
     if (playingAudio && audioRefs.current[playingAudio]) {
       audioRefs.current[playingAudio].pause();
@@ -120,12 +124,35 @@ export default function TestimonialsSection() {
     if (playingAudio === audioId) {
       setPlayingAudio(null);
     } else {
-      // For demo purposes, we'll simulate audio playback
-      setPlayingAudio(audioId);
-      // Simulate audio duration
-      setTimeout(() => {
-        setPlayingAudio(null);
-      }, 3000);
+      // Create audio element if it doesn't exist
+      if (!audioRefs.current[audioId]) {
+        const audio = new Audio(testimony.audioUrl);
+        audio.addEventListener("ended", () => {
+          setPlayingAudio(null);
+        });
+        audio.addEventListener("error", (e) => {
+          console.error("Error loading audio:", e);
+          alert(
+            "Error al cargar el audio. Verifica que el archivo esté disponible.",
+          );
+          setPlayingAudio(null);
+        });
+        audioRefs.current[audioId] = audio;
+      }
+
+      // Play the audio
+      const audio = audioRefs.current[audioId];
+      audio
+        .play()
+        .then(() => {
+          setPlayingAudio(audioId);
+        })
+        .catch((error) => {
+          console.error("Error playing audio:", error);
+          alert(
+            "Error al reproducir el audio. Verifica que el archivo esté disponible.",
+          );
+        });
     }
   };
 
