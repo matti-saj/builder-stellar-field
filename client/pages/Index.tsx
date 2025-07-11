@@ -7,6 +7,7 @@ import TestimonialsSection from "@/components/TestimonialsSection";
 import ExplorationMode from "@/components/ExplorationMode";
 import TriviaSection from "@/components/TriviaSection";
 import Timeline from "@/components/Timeline";
+import ImageCarousel from "@/components/ImageCarousel";
 import {
   ChevronDown,
   MapPin,
@@ -148,6 +149,9 @@ export default function Index() {
               );
             })}
           </div>
+
+          {/* Image Carousel */}
+          <ImageCarousel />
 
           <div className="space-y-4 sm:space-y-0 sm:space-x-4 sm:flex sm:justify-center">
             <Button
