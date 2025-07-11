@@ -33,7 +33,7 @@ export default function TestimonialsSection() {
       avatar: "/api/placeholder/120/120",
       title: "Recuerdos de la Quebrada",
       text: "Mi abuela me contaba sobre las antiguas ceremonias en el Pucará. Cada piedra tiene una historia, cada viento trae voces del pasado. Nosotros somos los guardianes de estas memorias.",
-      audioUrl: "https://www.soundjay.com/misc/sounds/bell-ringing-05.wav",
+      audioUrl: "synthetic", // Will generate synthetic audio
       image: "/api/placeholder/400/250",
       tags: ["tradiciones", "ancestros", "quebrada"],
     },
@@ -111,75 +111,85 @@ export default function TestimonialsSection() {
   );
 
   const handleAudioPlay = (audioId: string) => {
-    const testimony = testimonies.find((t) => t.id === audioId);
-    if (!testimony) return;
-
     // Stop any currently playing audio
-    if (playingAudio && audioRefs.current[playingAudio]) {
-      audioRefs.current[playingAudio].pause();
-      audioRefs.current[playingAudio].currentTime = 0;
+    if (playingAudio) {
+      setPlayingAudio(null);
+      return;
     }
 
-    if (playingAudio === audioId) {
-      setPlayingAudio(null);
-    } else {
-      // Get or create audio element
-      let audio = audioRefs.current[audioId];
-      if (!audio) {
-        audio = new Audio();
-        audio.crossOrigin = "anonymous";
-        audio.preload = "none";
+    try {
+      // Create Web Audio API context for synthetic audio
+      const audioContext = new (window.AudioContext ||
+        (window as any).webkitAudioContext)();
 
-        // Add event listeners
-        audio.addEventListener("ended", () => setPlayingAudio(null));
-        audio.addEventListener("error", (e) => {
-          console.error("Audio error:", e);
-          setPlayingAudio(null);
-          // Show user-friendly message
-          alert(
-            "Audio no disponible. Se está reproduciendo un sonido de ejemplo.",
-          );
-        });
+      // Create a pleasant chime sound to represent the audio testimony
+      const duration = 3; // 3 seconds
+      const frequency1 = 523.25; // C5
+      const frequency2 = 659.25; // E5
+      const frequency3 = 783.99; // G5
 
-        audioRefs.current[audioId] = audio;
-      }
+      // Create oscillators for harmony
+      const osc1 = audioContext.createOscillator();
+      const osc2 = audioContext.createOscillator();
+      const osc3 = audioContext.createOscillator();
 
-      // Set the source and try to play
-      audio.src = testimony.audioUrl;
-      audio.load(); // Reload the audio element
+      // Create gain nodes for volume control
+      const gain1 = audioContext.createGain();
+      const gain2 = audioContext.createGain();
+      const gain3 = audioContext.createGain();
+      const masterGain = audioContext.createGain();
 
-      audio
-        .play()
-        .then(() => {
-          setPlayingAudio(audioId);
-        })
-        .catch((error) => {
-          console.error("Playback error:", error);
-          setPlayingAudio(null);
+      // Connect nodes
+      osc1.connect(gain1);
+      osc2.connect(gain2);
+      osc3.connect(gain3);
+      gain1.connect(masterGain);
+      gain2.connect(masterGain);
+      gain3.connect(masterGain);
+      masterGain.connect(audioContext.destination);
 
-          // Try fallback - create a short beep sound
-          const audioContext = new (window.AudioContext ||
-            (window as any).webkitAudioContext)();
-          const oscillator = audioContext.createOscillator();
-          const gainNode = audioContext.createGain();
+      // Set frequencies
+      osc1.frequency.value = frequency1;
+      osc2.frequency.value = frequency2;
+      osc3.frequency.value = frequency3;
 
-          oscillator.connect(gainNode);
-          gainNode.connect(audioContext.destination);
+      // Set oscillator types
+      osc1.type = "sine";
+      osc2.type = "sine";
+      osc3.type = "sine";
 
-          oscillator.frequency.value = 800;
-          oscillator.type = "sine";
-          gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-          gainNode.gain.exponentialRampToValueAtTime(
-            0.01,
-            audioContext.currentTime + 1,
-          );
+      // Create envelope (fade in and out)
+      const now = audioContext.currentTime;
+      masterGain.gain.setValueAtTime(0, now);
+      masterGain.gain.linearRampToValueAtTime(0.2, now + 0.1);
+      masterGain.gain.linearRampToValueAtTime(0.2, now + duration - 0.5);
+      masterGain.gain.linearRampToValueAtTime(0, now + duration);
 
-          oscillator.start(audioContext.currentTime);
-          oscillator.stop(audioContext.currentTime + 1);
+      // Individual gains for harmony
+      gain1.gain.setValueAtTime(0.4, now);
+      gain2.gain.setValueAtTime(0.3, now);
+      gain3.gain.setValueAtTime(0.2, now);
 
-          setPlayingAudio(audioId);
-          setTimeout(() => setPlayingAudio(null), 1000);
-        });
+      // Start oscillators
+      osc1.start(now);
+      osc2.start(now);
+      osc3.start(now);
+
+      // Stop oscillators
+      osc1.stop(now + duration);
+      osc2.stop(now + duration);
+      osc3.stop(now + duration);
+
+      // Update state
+      setPlayingAudio(audioId);
+
+      // Reset state when audio ends
+      setTimeout(() => {
+        setPlayingAudio(null);
+      }, duration * 1000);
+    } catch (error) {
+      console.error("Error creating synthetic audio:", error);
+      alert("Audio no disponible en este navegador.");
     }
   };
 
@@ -296,27 +306,7 @@ export default function TestimonialsSection() {
           </div>
         )}
 
-        {/* Hidden audio elements for better browser compatibility */}
-        {testimonies.map((testimony) => (
-          <audio
-            key={`audio-${testimony.id}`}
-            ref={(el) => {
-              if (el) audioRefs.current[testimony.id] = el;
-            }}
-            preload="none"
-            onEnded={() => setPlayingAudio(null)}
-            onError={(e) => {
-              console.error("Error loading audio:", e);
-              setPlayingAudio(null);
-            }}
-            style={{ display: "none" }}
-            crossOrigin="anonymous"
-          >
-            <source src={testimony.audioUrl} type="audio/wav" />
-            <source src={testimony.audioUrl} type="audio/mpeg" />
-            <source src={testimony.audioUrl} type="audio/ogg" />
-          </audio>
-        ))}
+        {/* Audio is generated synthetically using Web Audio API */}
       </div>
     </section>
   );
