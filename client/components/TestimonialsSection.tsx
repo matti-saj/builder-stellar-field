@@ -33,7 +33,7 @@ export default function TestimonialsSection() {
       avatar: "/api/placeholder/120/120",
       title: "Recuerdos de la Quebrada",
       text: "Mi abuela me contaba sobre las antiguas ceremonias en el Pucará. Cada piedra tiene una historia, cada viento trae voces del pasado. Nosotros somos los guardianes de estas memorias.",
-      audioUrl: "google-drive", // Special marker for Google Drive file
+      audioUrl: "YOUR_AUDIO_URL_HERE", // Replace with your audio file URL
       image: "/api/placeholder/400/250",
       tags: ["tradiciones", "ancestros", "quebrada"],
     },
@@ -193,9 +193,40 @@ export default function TestimonialsSection() {
       return;
     }
 
-    // For "Recuerdos de la Quebrada" (audioId "1"), create a special voice simulation
-    if (audioId === "1") {
-      console.log('Playing voice simulation for "Recuerdos de la Quebrada"');
+    // For "Recuerdos de la Quebrada" (audioId "1"), try real audio first
+    if (audioId === "1" && testimony.audioUrl !== "YOUR_AUDIO_URL_HERE") {
+      console.log('Playing real audio for "Recuerdos de la Quebrada"');
+
+      // Create audio element
+      if (!audioRefs.current[audioId]) {
+        const audio = new Audio();
+        audio.crossOrigin = "anonymous";
+        audio.addEventListener("ended", () => setPlayingAudio(null));
+        audio.addEventListener("error", (e) => {
+          console.error("Audio error:", e);
+          setPlayingAudio(null);
+          alert("Error al cargar el audio. Cayendo a simulación de voz.");
+          // Fallback to voice simulation
+          createVoiceSimulation(audioId, 8);
+        });
+        audioRefs.current[audioId] = audio;
+      }
+
+      const audio = audioRefs.current[audioId];
+      audio.src = testimony.audioUrl;
+
+      audio
+        .play()
+        .then(() => {
+          setPlayingAudio(audioId);
+        })
+        .catch((error) => {
+          console.error("Error playing audio:", error);
+          alert("Error al reproducir. Usando simulación de voz.");
+          createVoiceSimulation(audioId, 8);
+        });
+    } else if (audioId === "1") {
+      console.log('Using voice simulation for "Recuerdos de la Quebrada"');
       createVoiceSimulation(audioId, 8); // 8 seconds of voice-like audio
     } else {
       // For other testimonies, use musical chimes
