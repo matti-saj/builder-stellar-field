@@ -100,37 +100,43 @@ export default function Index() {
                 title: "Mapa Interactivo",
                 description: "Explora territorios y lugares históricos",
                 color: "bg-primary",
+                section: "mapa",
               },
               {
                 icon: Users,
                 title: "Testimonios Orales",
                 description: "Escucha voces de las comunidades",
                 color: "bg-cactus",
+                section: "testimonios",
               },
               {
                 icon: Clock,
                 title: "Línea de Tiempo",
                 description: "Descubre la historia cronológica",
                 color: "bg-accent",
+                section: "timeline",
               },
               {
                 icon: Compass,
                 title: "Exploración Guiada",
                 description: "Recorridos temáticos personalizados",
                 color: "bg-stone",
+                section: "exploracion",
               },
               {
                 icon: Brain,
                 title: "Trivia Educativa",
                 description: "Aprende jugando sobre la cultura jujeña",
                 color: "bg-clay",
+                section: "trivia",
               },
             ].map((feature, index) => {
               const IconComponent = feature.icon;
               return (
                 <Card
                   key={index}
-                  className="hover:shadow-lg transition-all duration-300 hover:scale-105"
+                  className="hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer"
+                  onClick={() => handleSectionClick(feature.section)}
                 >
                   <CardContent className="p-6 text-center">
                     <div
