@@ -228,8 +228,8 @@ export default function Index() {
       {/* About Section */}
       <section className="py-16 bg-card">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+            <div className="flex flex-col justify-center">
               <h2 className="text-3xl font-bold text-foreground mb-6">
                 Preservando la Memoria Cultural
               </h2>
@@ -239,7 +239,7 @@ export default function Index() {
                 Jujuy. A través de tecnología interactiva, conectamos el pasado
                 con el presente.
               </p>
-              <ul className="space-y-3 text-muted-foreground">
+              <ul className="space-y-4 text-muted-foreground">
                 <li className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
                   <span>
@@ -249,7 +249,7 @@ export default function Index() {
                 <li className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-cactus rounded-full mt-2 flex-shrink-0" />
                   <span>
-                    Mapas interactivos con información histórica y cultural
+                    Mapas interactivos con informaci��n histórica y cultural
                   </span>
                 </li>
                 <li className="flex items-start space-x-3">
@@ -263,11 +263,22 @@ export default function Index() {
               </ul>
             </div>
             <div className="relative">
-              <YouTubeVideo
-                videoId="Fh15x7BkvJ4"
-                title="Patrimonio Cultural de Jujuy - Tradiciones Ancestrales"
-                className="w-full"
-              />
+              <div className="bg-gradient-to-br from-primary/5 to-cactus/5 p-6 rounded-2xl border border-border/50 shadow-lg">
+                <YouTubeVideo
+                  videoId="Fh15x7BkvJ4"
+                  title="Patrimonio Cultural de Jujuy - Tradiciones Ancestrales"
+                  className="w-full rounded-xl overflow-hidden"
+                />
+                <div className="mt-4 text-center">
+                  <h3 className="text-lg font-semibold text-foreground mb-2">
+                    Tradiciones Ancestrales de Jujuy
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Descubre la riqueza cultural a través de este documental
+                    sobre las tradiciones que perviven en nuestras comunidades.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
