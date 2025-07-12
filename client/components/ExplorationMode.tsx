@@ -359,17 +359,57 @@ export default function ExplorationMode() {
   const handleStartExploration = (themeId: string) => {
     setSelectedTheme(themeId);
     setCurrentStep(0);
+    setCompletedSteps([]);
+    setIsStepCompleted(false);
+    setShowStepContent(false);
+    setStepProgress(0);
   };
 
   const handleNextStep = () => {
     if (currentStep < explorationSteps.length - 1) {
+      // Mark current step as completed
+      const newCompletedSteps = [...completedSteps];
+      newCompletedSteps[currentStep] = true;
+      setCompletedSteps(newCompletedSteps);
+
       setCurrentStep(currentStep + 1);
+      setIsStepCompleted(false);
+      setShowStepContent(false);
+      setStepProgress(0);
+    }
+  };
+
+  const handleCompleteStep = () => {
+    setIsStepCompleted(true);
+    setStepProgress(100);
+  };
+
+  const handleActivityComplete = (activityId: string) => {
+    const currentStepData = explorationSteps[currentStep];
+    if (currentStepData?.activities) {
+      const totalActivities = currentStepData.activities.length;
+      const completedActivities =
+        currentStepData.activities.filter((a) => a.completed).length + 1;
+      const progress = (completedActivities / totalActivities) * 100;
+      setStepProgress(progress);
+
+      if (progress >= 100) {
+        setIsStepCompleted(true);
+      }
     }
   };
 
   const handleResetExploration = () => {
     setSelectedTheme(null);
     setCurrentStep(0);
+    setCompletedSteps([]);
+    setIsStepCompleted(false);
+    setShowStepContent(false);
+    setStepProgress(0);
+  };
+
+  const toggleStepContent = () => {
+    setShowStepContent(!showStepContent);
   };
 
   const getStepIcon = (type: string) => {
