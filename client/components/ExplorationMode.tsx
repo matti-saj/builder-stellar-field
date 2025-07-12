@@ -32,11 +32,35 @@ interface ExplorationStep {
   location: string;
   type: "map" | "testimony" | "trivia";
   completed: boolean;
+  detailedContent?: string;
+  activities?: Activity[];
+  estimatedTime?: string;
+  keyPoints?: string[];
+  interactiveElements?: InteractiveElement[];
+}
+
+interface Activity {
+  id: string;
+  title: string;
+  description: string;
+  type: "observation" | "listening" | "reflection" | "interaction";
+  completed: boolean;
+}
+
+interface InteractiveElement {
+  id: string;
+  type: "button" | "quiz" | "slider" | "checklist";
+  title: string;
+  content: any;
 }
 
 export default function ExplorationMode() {
   const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
+  const [completedSteps, setCompletedSteps] = useState<boolean[]>([]);
+  const [isStepCompleted, setIsStepCompleted] = useState(false);
+  const [showStepContent, setShowStepContent] = useState(false);
+  const [stepProgress, setStepProgress] = useState(0);
 
   const explorationThemes: ExplorationTheme[] = [
     {
@@ -98,34 +122,161 @@ export default function ExplorationMode() {
         {
           id: "1",
           title: "Orígenes Precolombinos",
-          description: "Explora los asentamientos más antiguos de la región",
+          description:
+            "Explora los asentamientos más antiguos de la región y descubre cómo vivían los pueblos originarios",
           location: "Pucará de Tilcara",
           type: "map",
           completed: false,
+          estimatedTime: "8 minutos",
+          detailedContent:
+            "El Pucará de Tilcara fue el centro político y religioso más importante de los tilcaras. Construido estratégicamente en una colina, este asentamiento fortificado controlaba el valle y las rutas comerciales. Sus estructuras de piedra han resistido más de mil años, contando la historia de una civilización avanzada que dominaba la agricultura en terrazas, la metalurgia y el intercambio comercial con pueblos distantes.",
+          keyPoints: [
+            "Arquitectura defensiva estratégica",
+            "Sistema agrícola en terrazas",
+            "Red de intercambio comercial",
+            "Organización social compleja",
+          ],
+          activities: [
+            {
+              id: "a1",
+              title: "Observa las Estructuras",
+              description:
+                "Identifica los elementos defensivos y residenciales en el mapa del pucará",
+              type: "observation",
+              completed: false,
+            },
+            {
+              id: "a2",
+              title: "Imagina la Vida Cotidiana",
+              description:
+                "Reflexiona sobre cómo era un día típico en esta fortaleza hace 1000 años",
+              type: "reflection",
+              completed: false,
+            },
+            {
+              id: "a3",
+              title: "Explora las Rutas",
+              description:
+                "Descubre las conexiones comerciales con otras regiones",
+              type: "interaction",
+              completed: false,
+            },
+          ],
         },
         {
           id: "2",
           title: "Voces Ancestrales",
-          description: "Escucha testimonios sobre tradiciones milenarias",
+          description:
+            "Sumérgete en los testimonios que mantienen viva la memoria oral de los pueblos originarios",
           location: "Testimonios de ancianos",
           type: "testimony",
           completed: false,
+          estimatedTime: "10 minutos",
+          detailedContent:
+            "La tradición oral es el hilo conductor que conecta el pasado con el presente. Los ancianos de las comunidades son los guardianes de historias, rituales, conocimientos medicinales y cosmogónicos que se han transmitido de generación en generación. Cada relato es una ventana al alma de un pueblo que ha sabido preservar su identidad a pesar de los siglos.",
+          keyPoints: [
+            "Transmisión generacional del conocimiento",
+            "Rituales y ceremonias ancestrales",
+            "Medicina tradicional y plantas sagradas",
+            "Cosmogonía andina y relación con la naturaleza",
+          ],
+          activities: [
+            {
+              id: "b1",
+              title: "Escucha Atentamente",
+              description:
+                "Reproduce los testimonios y presta atención a las emociones transmitidas",
+              type: "listening",
+              completed: false,
+            },
+            {
+              id: "b2",
+              title: "Identifica Elementos Culturales",
+              description:
+                "Reconoce referencias a rituales, plantas medicinales y tradiciones",
+              type: "observation",
+              completed: false,
+            },
+            {
+              id: "b3",
+              title: "Reflexiona sobre la Importancia",
+              description:
+                "Considera por qué es crucial preservar estos testimonios orales",
+              type: "reflection",
+              completed: false,
+            },
+          ],
         },
         {
           id: "3",
           title: "El Camino del Inca",
-          description: "Recorre las rutas históricas de comercio andino",
+          description:
+            "Recorre virtualmente las rutas que conectaron el imperio más extenso de América precolombina",
           location: "Quebrada de Humahuaca",
           type: "map",
           completed: false,
+          estimatedTime: "12 minutos",
+          detailedContent:
+            "El Qhapaq Ñan o Camino del Inca es una de las obras de ingeniería más impresionantes de la humanidad. Esta red vial de más de 30,000 kilómetros conectaba todo el imperio incaico desde Colombia hasta Chile. En Jujuy, este camino atraviesa la Quebrada de Humahuaca, uniendo pueblos, culturas y tradiciones. Era más que un simple sendero: era un sistema de comunicación, comercio y control territorial que permitió la expansión y consolidación del Tahuantinsuyu.",
+          keyPoints: [
+            "Red vial de 30,000 kilómetros",
+            "Sistema de chasquis (mensajeros)",
+            "Tambos (postas de descanso)",
+            "Integración de pueblos y culturas",
+          ],
+          activities: [
+            {
+              id: "c1",
+              title: "Sigue la Ruta",
+              description:
+                "Traza el recorrido del camino incaico por la Quebrada de Humahuaca",
+              type: "interaction",
+              completed: false,
+            },
+            {
+              id: "c2",
+              title: "Descubre los Tambos",
+              description:
+                "Localiza las estaciones de descanso y abastecimiento",
+              type: "observation",
+              completed: false,
+            },
+            {
+              id: "c3",
+              title: "Imagina el Intercambio",
+              description:
+                "Reflexiona sobre los productos y conocimientos que se intercambiaban",
+              type: "reflection",
+              completed: false,
+            },
+          ],
         },
         {
           id: "4",
-          title: "Prueba tus Conocimientos",
-          description: "Responde preguntas sobre la historia de Jujuy",
+          title: "Evaluación de Conocimientos",
+          description:
+            "Demuestra lo que has aprendido sobre la rica historia precolombina de Jujuy",
           location: "Trivia Educativa",
           type: "trivia",
           completed: false,
+          estimatedTime: "5 minutos",
+          detailedContent:
+            "Es momento de poner a prueba los conocimientos adquiridos durante esta exploración histórica. Este quiz evalúa tu comprensión sobre los pueblos originarios, sus formas de vida, organización social, y la importancia del patrimonio cultural que han legado a las generaciones actuales.",
+          keyPoints: [
+            "Conocimiento sobre pueblos originarios",
+            "Comprensión de estructuras sociales",
+            "Importancia del patrimonio cultural",
+            "Conexiones históricas",
+          ],
+          activities: [
+            {
+              id: "d1",
+              title: "Responde el Quiz",
+              description: "Contesta preguntas sobre la historia precolombina",
+              type: "interaction",
+              completed: false,
+            },
+          ],
         },
       ],
       geografia: [
