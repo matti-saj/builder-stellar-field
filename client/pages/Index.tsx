@@ -82,46 +82,6 @@ export default function Index() {
         </div>
 
         <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          {/* Header Image */}
-          <div className="mb-8">
-            <div className="relative w-full mb-8">
-              <PlaceholderImage
-                src="/api/placeholder/1600/600"
-                alt="Paisaje cultural de Jujuy - Quebrada de Humahuaca"
-                className="w-full h-72 md:h-96 lg:h-[500px] rounded-2xl shadow-2xl"
-                fallbackContent={
-                  <div className="text-center text-stone-foreground">
-                    <div className="w-24 h-24 mx-auto mb-4 opacity-60">
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className="w-full h-full"
-                      >
-                        <path d="M14,6L10.25,11L13.1,14.8L11.5,16C9.81,13.75 7,10 7,10L1,18H23L14,6Z" />
-                      </svg>
-                    </div>
-                    <h3 className="text-xl font-semibold mb-2">
-                      Paisajes de Jujuy
-                    </h3>
-                    <p className="text-sm opacity-80">
-                      Quebrada de Humahuaca - Patrimonio de la Humanidad
-                    </p>
-                  </div>
-                }
-              />
-
-              {/* Image overlay with gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-2xl" />
-
-              {/* Floating badge */}
-              <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full">
-                <span className="text-sm font-medium text-foreground">
-                  🏔️ Patrimonio UNESCO
-                </span>
-              </div>
-            </div>
-          </div>
-
           <div className="mb-8">
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground mb-6">
               <span className="bg-gradient-to-r from-primary to-cactus bg-clip-text text-transparent">
