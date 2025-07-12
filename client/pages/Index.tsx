@@ -209,7 +209,7 @@ export default function Index() {
                 <li className="flex items-start space-x-3">
                   <div className="w-2 h-2 bg-cactus rounded-full mt-2 flex-shrink-0" />
                   <span>
-                    Mapas interactivos con informaci��n histórica y cultural
+                    Mapas interactivos con información histórica y cultural
                   </span>
                 </li>
                 <li className="flex items-start space-x-3">
@@ -324,10 +324,17 @@ export default function Index() {
             </div>
 
             <div>
-              <h4 className="font-semibold text-foreground mb-4">
-                Colaboradores
-              </h4>
-              <p className="text-sm text-muted-foreground mb-4">
+              <h4 className="font-semibold text-foreground mb-2">Grupo 10 SystemSpark: La chispa de los sistemas</h4>
+
+              <h4 className="font-semibold text-foreground mb-2">Integrantes</h4>
+              <ul className="text-sm text-muted-foreground mb-4 list-disc list-inside">
+                <li>Humacata, Daniel</li>
+                <li>Ibañes, Emanuel</li>
+                <li>Sajama, Maximiliano</li>
+              </ul>
+
+              <h4 className="font-semibold text-foreground mb-2">Colaboradores</h4>
+              <p className="text-sm text-muted-foreground mb-2">
                 Este proyecto fue desarrollado en colaboración con comunidades
                 originarias de Jujuy y organizaciones culturales locales.
               </p>

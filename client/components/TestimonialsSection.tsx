@@ -35,9 +35,8 @@ export default function TestimonialsSection() {
       avatar: "/api/placeholder/120/120",
       title: "Recuerdos de la Quebrada",
       text: "Mi abuela me contaba sobre las antiguas ceremonias en el Pucará. Cada piedra tiene una historia, cada viento trae voces del pasado. Nosotros somos los guardianes de estas memorias.",
-      audioUrl:
-        "https://www.dropbox.com/scl/fi/7k7cju1muvvn6rcrkalzv/Recuerdos-de-la-Quebrada.opus?rlkey=76rujvlxu2jvqtu95oy3vzll6&st=pt18dkcs&dl=1",
-      image: "/api/placeholder/400/250",
+      audioUrl: "https://www.dropbox.com/scl/fi/7k7cju1muvvn6rcrkalzv/Recuerdos-de-la-Quebrada.opus?rlkey=76rujvlxu2jvqtu95oy3vzll6&st=pt18dkcs&dl=1",
+      image: "https://www.dropbox.com/scl/fi/71jpb7u4o0dby4gpbutjw/img_recuerdo_pucara.webp?rlkey=kndequss29f7use36icz5j64a&st=k23feyoz&dl=1",
       tags: ["tradiciones", "ancestros", "quebrada"],
     },
     {
@@ -49,7 +48,7 @@ export default function TestimonialsSection() {
       title: "El Arte de Tejer Historias",
       text: "Cada color en nuestros tejidos cuenta una historia. El rojo de la cochinilla, el amarillo de la retama. Mis manos aprendieron estos secretos de mi madre, como ella de la suya.",
       audioUrl: "data:audio/wav;base64,", // Mock audio URL
-      image: "/api/placeholder/400/250",
+      image: "https://www.dropbox.com/scl/fi/tqw5c8vpayx72p2jc73gy/img_tejidos.webp?rlkey=8rzu58iklohainwyh5c25ud0m&st=zq1nhmic&dl=1",
       tags: ["artesanías", "textiles", "tradición"],
     },
     {
@@ -60,9 +59,8 @@ export default function TestimonialsSection() {
       avatar: "/api/placeholder/120/120",
       title: "Cantos de la Pachamama",
       text: "Cuando éramos jóvenes, cada siembra era una fiesta. Cantábamos a la Pachamama, le pedíamos su bendición. La tierra nos escuchaba y nos daba abundancia.",
-      audioUrl:
-        "https://www.dropbox.com/scl/fi/rx4gzrsh95qidoga4wuft/Cantos-Pachamama.opus?rlkey=6j47yvinbgu4xzn9kh1g69sqp&st=m9cfmipe&dl=1",
-      image: "/api/placeholder/400/250",
+      audioUrl: "https://www.dropbox.com/scl/fi/rx4gzrsh95qidoga4wuft/Cantos-Pachamama.opus?rlkey=6j47yvinbgu4xzn9kh1g69sqp&st=m9cfmipe&dl=1",
+      image: "https://www.dropbox.com/scl/fi/dnlvfyj6hveoqf88zvxgp/img_cantos.webp?rlkey=sutikyrif26dfpasmag1wuu0z&st=tk5qhby8&dl=1",
       tags: ["agricultura", "pachamama", "rituales"],
     },
     {
@@ -73,8 +71,8 @@ export default function TestimonialsSection() {
       avatar: "/api/placeholder/120/120",
       title: "Resistencia y Memoria",
       text: "Nuestras tierras fueron siempre nuestras. Los papeles pueden decir otra cosa, pero la tierra conoce a sus hijos. Seguimos luchando por lo que es nuestro por derecho ancestral.",
-      audioUrl: "data:audio/wav;base64,", // Mock audio URL
-      image: "/api/placeholder/400/250",
+      audioUrl: "https://www.dropbox.com/scl/fi/icw5qal1kd0c74jxgwe67/Resistencia-y-memoria.mp3?rlkey=12bsu4z7vi0lizrmo9efvydv2&st=5mr77gve&dl=1",
+      image: "https://www.dropbox.com/scl/fi/tedaaa9ji9zf4nusth6ab/img_resistencia_memoria.jpg?rlkey=tnkzyz7mwh8maid0vxwah9obn&st=suya15he&dl=1",
       tags: ["resistencia", "territorio", "derechos"],
     },
     {
@@ -85,8 +83,8 @@ export default function TestimonialsSection() {
       avatar: "/api/placeholder/120/120",
       title: "Medicina de los Abuelos",
       text: "Las plantas del cerro son nuestras maestras. La coca sagrada, la muña para el estómago, el palo santo para limpiar el alma. Este conocimiento no debe perderse.",
-      audioUrl: "data:audio/wav;base64,", // Mock audio URL
-      image: "/api/placeholder/400/250",
+      audioUrl: "https://www.dropbox.com/scl/fi/vz3l2rz67gemwol2yzkvl/Medicina-Abuelos.mp3?rlkey=m1b118ecwkkgro489qa1jsaik&st=yh4msg0v&dl=1",
+      image: "https://www.dropbox.com/scl/fi/lc5tyjjc70fmy6lvvm5zz/img_medicina_abuelos.jpg?rlkey=zszt05pyu74v7c967awiec5df&st=o8n29fth&dl=1",
       tags: ["medicina", "plantas", "sabiduría"],
     },
     {
@@ -98,7 +96,7 @@ export default function TestimonialsSection() {
       title: "Las Voces del Viento",
       text: "El cóndor vuela alto y ve todo. Nosotros somos como él, guardamos la visión completa de nuestra historia. Las montañas nos susurran secretos milenarios.",
       audioUrl: "data:audio/wav;base64,", // Mock audio URL
-      image: "/api/placeholder/400/250",
+      image: "https://www.dropbox.com/scl/fi/2il11b24mr3xg759nw8f3/img_voces_viento.jpg?rlkey=nrkoj6u4y8yqht8120mtiip7e&st=kfn4tr10&dl=1",
       tags: ["naturaleza", "espiritualidad", "montañas"],
     },
   ];
@@ -243,7 +241,7 @@ export default function TestimonialsSection() {
 
     // For testimonies with Dropbox audio (audioId "1" and "3"), try real audio first
     if (
-      (audioId === "1" || audioId === "3") &&
+      (audioId === "1" || audioId === "2" || audioId === "3" || audioId === "4" || audioId === "5" || audioId === "6") &&
       testimony.audioUrl.includes("dropbox.com")
     ) {
       console.log(`🎵 Playing Dropbox audio for "${testimony.title}"`);
@@ -330,7 +328,7 @@ export default function TestimonialsSection() {
           }
         }, 5000);
       }
-    } else if (audioId === "1" || audioId === "3") {
+    } else if (audioId === "1" || audioId === "2" || audioId === "3" || audioId === "4" || audioId === "5" || audioId === "6") {
       console.log(`Using voice simulation for "${testimony.title}"`);
       createVoiceSimulation(audioId, 8); // 8 seconds of voice-like audio
     } else {
@@ -615,6 +613,95 @@ export default function TestimonialsSection() {
             type="audio/mpeg"
           />
         </audio>
+
+        {/* Audio for "Resistencia y Memoria" */}
+        <audio
+          ref={(el) => {
+            if (el) {
+              audioRefs.current["4"] = el;
+
+              // Add event listeners for better control
+              el.addEventListener("ended", () => setPlayingAudio(null));
+              el.addEventListener("pause", () => {
+                if (playingAudio === "4") {
+                  setPlayingAudio(null);
+                }
+              });
+
+              // Optional: Debug preload lifecycle
+              el.addEventListener("loadstart", () =>
+                console.log("🔄 Iniciando carga de Resistencia y Memoria..."),
+              );
+              el.addEventListener("loadedmetadata", () =>
+                console.log("📊 Metadata cargada (Resistencia)"),
+              );
+              el.addEventListener("loadeddata", () =>
+                console.log("📁 Datos iniciales cargados (Resistencia)"),
+              );
+              el.addEventListener("canplay", () =>
+                console.log("▶️ Resistencia listo para reproducir"),
+              );
+              el.addEventListener("canplaythrough", () =>
+                console.log("🚀 Resistencia completamente cargado"),
+              );
+            }
+          }}
+          preload="auto"
+          style={{ display: "none" }}
+        >
+          <source
+            src="https://www.dropbox.com/scl/fi/icw5qal1kd0c74jxgwe67/Resistencia-y-memoria.mp3?rlkey=12bsu4z7vi0lizrmo9efvydv2&st=5mr77gve&dl=1"
+            type="audio/mpeg"
+          />
+          <source
+            src="https://www.dropbox.com/scl/fi/icw5qal1kd0c74jxgwe67/Resistencia-y-memoria.mp3?rlkey=12bsu4z7vi0lizrmo9efvydv2&st=5mr77gve&dl=1"
+            type="audio/mp3"
+          />
+        </audio>
+
+        {/* Audio for "Medicina de los Abuelos" */}
+        <audio
+          ref={(el) => {
+            if (el) {
+              audioRefs.current["5"] = el;
+
+              el.addEventListener("ended", () => setPlayingAudio(null));
+              el.addEventListener("pause", () => {
+                if (playingAudio === "5") {
+                  setPlayingAudio(null);
+                }
+              });
+
+              el.addEventListener("loadstart", () =>
+                console.log("🔄 Iniciando carga de Medicina de los Abuelos..."),
+              );
+              el.addEventListener("loadedmetadata", () =>
+                console.log("📊 Metadata cargada (Medicina)"),
+              );
+              el.addEventListener("loadeddata", () =>
+                console.log("📁 Datos iniciales cargados (Medicina)"),
+              );
+              el.addEventListener("canplay", () =>
+                console.log("▶️ Medicina lista para reproducir"),
+              );
+              el.addEventListener("canplaythrough", () =>
+                console.log("🚀 Medicina completamente cargada"),
+              );
+            }
+          }}
+          preload="auto"
+          style={{ display: "none" }}
+        >
+          <source
+            src="https://www.dropbox.com/scl/fi/vz3l2rz67gemwol2yzkvl/Medicina-Abuelos.mp3?rlkey=m1b118ecwkkgro489qa1jsaik&st=yh4msg0v&dl=1"
+            type="audio/mpeg"
+          />
+          <source
+            src="https://www.dropbox.com/scl/fi/vz3l2rz67gemwol2yzkvl/Medicina-Abuelos.mp3?rlkey=m1b118ecwkkgro489qa1jsaik&st=yh4msg0v&dl=1"
+            type="audio/mp3"
+          />
+        </audio>
+
       </div>
     </section>
   );
