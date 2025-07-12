@@ -19,43 +19,48 @@ export default function ImageCarousel() {
   const images: CarouselImage[] = [
     {
       id: "1",
-      title: "Quebrada de Humahuaca",
-      description:
-        "Paisaje cultural declarado Patrimonio de la Humanidad por la UNESCO. Sus cerros multicolores narran millones de años de historia geológica y milenios de presencia humana.",
-      image: "/api/placeholder/800/400",
-      category: "Patrimonio Natural",
-    },
-    {
-      id: "2",
       title: "Pucará de Tilcara",
       description:
-        "Fortaleza precolombina que fue centro político y ceremonial del pueblo tilcara. Sus ruinas nos conectan con la sabiduría ancestral de los pueblos originarios.",
-      image: "/api/placeholder/800/400",
+        "Fortaleza precolombina que fue centro político y ceremonial del pueblo tilcara. Sus ruinas arqueológicas nos conectan con la sabiduría ancestral de los pueblos originarios y su avanzada organización social.",
+      image:
+        "https://www.dropbox.com/scl/fi/kwpvnsn9i5elq8ieyxh8l/Img_Tilcara.png?rlkey=757nns44mmk2zn2dcaeqc68af&st=nymi9akq&dl=1",
       category: "Arqueología",
     },
     {
-      id: "3",
-      title: "Artesanías Tradicionales",
+      id: "2",
+      title: "Pollera de la Colla",
       description:
-        "Los textiles jujeños conservan técnicas milenarias. Cada color y patrón cuenta una historia, transmitida de generación en generación por manos expertas.",
-      image: "/api/placeholder/800/400",
+        "Vestimenta tradicional de las mujeres kollas que representa la identidad cultural andina. Cada detalle, color y bordado cuenta la historia de un pueblo que conserva sus tradiciones ancestrales.",
+      image:
+        "https://www.dropbox.com/scl/fi/vxfcnsh18z9pkz8w3r5qp/Img_PolleraDeLaColla.png?rlkey=kex788sf4sxihwhq2vhb9xsbu&st=ckcx79iq&dl=1",
       category: "Cultura Viva",
     },
     {
-      id: "4",
-      title: "Ceremonias Ancestrales",
+      id: "3",
+      title: "Monumento al Libertador",
       description:
-        "Los rituales a la Pachamama mantienen viva la espiritualidad andina. Estas ceremonias conectan a las comunidades con la tierra y sus ancestros.",
-      image: "/api/placeholder/800/400",
-      category: "Tradiciones",
+        "Homenaje a los héroes de la independencia que lucharon en tierras jujeñas. Este monumento recuerda el papel fundamental de Jujuy en la gesta libertadora y el heroico Éxodo Jujeño.",
+      image:
+        "https://www.dropbox.com/scl/fi/dcixph3rzj8hgzu79xfw8/Img_Libertador.png?rlkey=69yfnw59joan2c01o60k8q9tx&st=8pjbekgk&dl=1",
+      category: "Historia Patria",
+    },
+    {
+      id: "4",
+      title: "Monumento a los Héroes de la Independencia",
+      description:
+        "Memorial que honra la memoria de quienes sacrificaron todo por la libertad. Representa el espíritu heroico del pueblo jujeño y su contribución decisiva a la independencia argentina.",
+      image:
+        "https://www.dropbox.com/scl/fi/5m001uly7tdwdh9bl07qh/Img_MonumentoHeroesIndependencia.png?rlkey=cp2ywd68s67ef9gsas1doplwf&st=k6v6gmm8&dl=1",
+      category: "Patrimonio Histórico",
     },
     {
       id: "5",
-      title: "Salinas Grandes",
+      title: "León de Jujuy",
       description:
-        "Extenso salar que ha sido fuente de vida y comercio desde tiempos precolombinos. Su inmensidad blanca refleja el cielo andino como un espejo natural.",
-      image: "/api/placeholder/800/400",
-      category: "Geografía",
+        "Símbolo heráldico de la provincia que representa la bravura y el coraje del pueblo jujeño. Esta figura emblemática evoca la fuerza y determinación que caracteriza a la tierra del Éxodo.",
+      image:
+        "https://www.dropbox.com/scl/fi/ug85ajyzwhbx7jr4ltbi9/Img_Leon.png?rlkey=3xotyy4onggqh24o74x7y9u1n&st=h0n1xf18&dl=1",
+      category: "Símbolos Patrios",
     },
   ];
 
