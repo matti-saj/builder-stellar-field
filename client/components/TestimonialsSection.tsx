@@ -436,7 +436,23 @@ export default function TestimonialsSection() {
           </div>
         )}
 
-        {/* Audio is generated synthetically - no external files needed */}
+        {/* Hidden audio element for Dropbox OPUS file */}
+        <audio
+          ref={(el) => {
+            if (el) audioRefs.current["1"] = el;
+          }}
+          preload="metadata"
+          style={{ display: "none" }}
+        >
+          <source
+            src="https://www.dropbox.com/scl/fi/7k7cju1muvvn6rcrkalzv/Recuerdos-de-la-Quebrada.opus?rlkey=76rujvlxu2jvqtu95oy3vzll6&st=pt18dkcs&dl=1"
+            type="audio/opus"
+          />
+          <source
+            src="https://www.dropbox.com/scl/fi/7k7cju1muvvn6rcrkalzv/Recuerdos-de-la-Quebrada.opus?rlkey=76rujvlxu2jvqtu95oy3vzll6&st=pt18dkcs&dl=1"
+            type="audio/ogg"
+          />
+        </audio>
       </div>
     </section>
   );
