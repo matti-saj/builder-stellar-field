@@ -33,7 +33,8 @@ export default function TestimonialsSection() {
       avatar: "/api/placeholder/120/120",
       title: "Recuerdos de la Quebrada",
       text: "Mi abuela me contaba sobre las antiguas ceremonias en el Pucará. Cada piedra tiene una historia, cada viento trae voces del pasado. Nosotros somos los guardianes de estas memorias.",
-      audioUrl: "YOUR_AUDIO_URL_HERE", // Replace with your audio file URL
+      audioUrl:
+        "https://www.dropbox.com/scl/fi/7k7cju1muvvn6rcrkalzv/Recuerdos-de-la-Quebrada.opus?rlkey=76rujvlxu2jvqtu95oy3vzll6&st=pt18dkcs&dl=1",
       image: "/api/placeholder/400/250",
       tags: ["tradiciones", "ancestros", "quebrada"],
     },
