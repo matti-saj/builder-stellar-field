@@ -60,7 +60,8 @@ export default function TestimonialsSection() {
       avatar: "/api/placeholder/120/120",
       title: "Cantos de la Pachamama",
       text: "Cuando éramos jóvenes, cada siembra era una fiesta. Cantábamos a la Pachamama, le pedíamos su bendición. La tierra nos escuchaba y nos daba abundancia.",
-      audioUrl: "data:audio/wav;base64,", // Mock audio URL
+      audioUrl:
+        "https://www.dropbox.com/scl/fi/rx4gzrsh95qidoga4wuft/Cantos-Pachamama.opus?rlkey=6j47yvinbgu4xzn9kh1g69sqp&st=m9cfmipe&dl=1",
       image: "/api/placeholder/400/250",
       tags: ["agricultura", "pachamama", "rituales"],
     },
@@ -240,9 +241,12 @@ export default function TestimonialsSection() {
       setPlayingAudio(null);
     }
 
-    // For "Recuerdos de la Quebrada" (audioId "1"), try real audio first
-    if (audioId === "1" && testimony.audioUrl.includes("dropbox.com")) {
-      console.log('🎵 Playing Dropbox audio for "Recuerdos de la Quebrada"');
+    // For testimonies with Dropbox audio (audioId "1" and "3"), try real audio first
+    if (
+      (audioId === "1" || audioId === "3") &&
+      testimony.audioUrl.includes("dropbox.com")
+    ) {
+      console.log(`🎵 Playing Dropbox audio for "${testimony.title}"`);
 
       const audio = audioRefs.current[audioId];
       if (!audio) {
@@ -326,8 +330,8 @@ export default function TestimonialsSection() {
           }
         }, 5000);
       }
-    } else if (audioId === "1") {
-      console.log('Using voice simulation for "Recuerdos de la Quebrada"');
+    } else if (audioId === "1" || audioId === "3") {
+      console.log(`Using voice simulation for "${testimony.title}"`);
       createVoiceSimulation(audioId, 8); // 8 seconds of voice-like audio
     } else {
       // For other testimonies, use musical chimes
