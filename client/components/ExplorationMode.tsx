@@ -552,48 +552,218 @@ export default function ExplorationMode() {
 
         {/* Current step */}
         {explorationSteps[currentStep] && (
-          <Card className="mb-8">
-            <CardContent className="p-8">
-              <div className="text-center">
-                <div className="flex items-center justify-center mb-4">
-                  {(() => {
-                    const StepIcon = getStepIcon(
-                      explorationSteps[currentStep].type,
-                    );
-                    return (
-                      <div className="bg-primary text-primary-foreground rounded-full p-4">
-                        <StepIcon className="w-8 h-8" />
+          <div className="space-y-6">
+            {/* Main Step Card */}
+            <Card className="overflow-hidden">
+              <CardContent className="p-0">
+                {/* Step Header */}
+                <div className="bg-gradient-to-r from-primary/10 to-cactus/10 p-6 border-b">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-4">
+                      {(() => {
+                        const StepIcon = getStepIcon(
+                          explorationSteps[currentStep].type,
+                        );
+                        return (
+                          <div
+                            className={`${isStepCompleted ? "bg-cactus" : "bg-primary"} text-white rounded-full p-3 transition-colors duration-300`}
+                          >
+                            <StepIcon className="w-6 h-6" />
+                          </div>
+                        );
+                      })()}
+                      <div>
+                        <h3 className="text-2xl font-bold text-foreground mb-1">
+                          {explorationSteps[currentStep].title}
+                        </h3>
+                        <div className="flex items-center space-x-4 text-sm text-muted-foreground">
+                          <Badge variant="outline">
+                            📍 {explorationSteps[currentStep].location}
+                          </Badge>
+                          {explorationSteps[currentStep].estimatedTime && (
+                            <span className="flex items-center space-x-1">
+                              <Clock className="w-4 h-4" />
+                              <span>
+                                {explorationSteps[currentStep].estimatedTime}
+                              </span>
+                            </span>
+                          )}
+                        </div>
                       </div>
-                    );
-                  })()}
+                    </div>
+
+                    {isStepCompleted && (
+                      <div className="flex items-center space-x-2 text-cactus">
+                        <Sparkles className="w-5 h-5" />
+                        <span className="font-medium">Completado</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Step Progress */}
+                  {stepProgress > 0 && (
+                    <div className="mt-4">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm font-medium">
+                          Progreso del paso
+                        </span>
+                        <span className="text-sm text-muted-foreground">
+                          {Math.round(stepProgress)}%
+                        </span>
+                      </div>
+                      <div className="w-full bg-muted rounded-full h-2">
+                        <div
+                          className="bg-cactus h-2 rounded-full transition-all duration-500"
+                          style={{ width: `${stepProgress}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                <h3 className="text-2xl font-bold text-foreground mb-3">
-                  {explorationSteps[currentStep].title}
-                </h3>
+                {/* Step Content */}
+                <div className="p-6">
+                  <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+                    {explorationSteps[currentStep].description}
+                  </p>
 
-                <p className="text-lg text-muted-foreground mb-4">
-                  {explorationSteps[currentStep].description}
-                </p>
+                  {/* Detailed Content Toggle */}
+                  <div className="mb-6">
+                    <Button
+                      variant="outline"
+                      onClick={toggleStepContent}
+                      className="mb-4"
+                    >
+                      {showStepContent
+                        ? "Ocultar detalles"
+                        : "Ver contenido detallado"}
+                      <ArrowRight
+                        className={`w-4 h-4 ml-2 transition-transform ${showStepContent ? "rotate-90" : ""}`}
+                      />
+                    </Button>
 
-                <Badge variant="outline" className="mb-6">
-                  📍 {explorationSteps[currentStep].location}
-                </Badge>
+                    {showStepContent &&
+                      explorationSteps[currentStep].detailedContent && (
+                        <Card className="bg-muted/50">
+                          <CardContent className="p-4">
+                            <p className="text-muted-foreground leading-relaxed">
+                              {explorationSteps[currentStep].detailedContent}
+                            </p>
 
-                <div className="flex justify-center space-x-4">
-                  <Button
-                    onClick={handleNextStep}
-                    disabled={currentStep >= explorationSteps.length - 1}
-                  >
-                    {currentStep < explorationSteps.length - 1
-                      ? "Siguiente Paso"
-                      : "Completado"}
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
+                            {/* Key Points */}
+                            {explorationSteps[currentStep].keyPoints && (
+                              <div className="mt-4">
+                                <h4 className="font-semibold text-foreground mb-3">
+                                  Puntos clave:
+                                </h4>
+                                <div className="grid md:grid-cols-2 gap-2">
+                                  {explorationSteps[currentStep].keyPoints?.map(
+                                    (point, index) => (
+                                      <div
+                                        key={index}
+                                        className="flex items-start space-x-2"
+                                      >
+                                        <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
+                                        <span className="text-sm text-muted-foreground">
+                                          {point}
+                                        </span>
+                                      </div>
+                                    ),
+                                  )}
+                                </div>
+                              </div>
+                            )}
+                          </CardContent>
+                        </Card>
+                      )}
+                  </div>
+
+                  {/* Activities */}
+                  {explorationSteps[currentStep].activities && (
+                    <div className="mb-6">
+                      <h4 className="text-lg font-semibold text-foreground mb-4">
+                        Actividades de exploración:
+                      </h4>
+                      <div className="grid md:grid-cols-1 gap-4">
+                        {explorationSteps[currentStep].activities?.map(
+                          (activity, index) => (
+                            <Card
+                              key={activity.id}
+                              className="hover:shadow-md transition-shadow"
+                            >
+                              <CardContent className="p-4">
+                                <div className="flex items-start space-x-3">
+                                  <div className="w-8 h-8 bg-accent text-accent-foreground rounded-full flex items-center justify-center text-sm font-medium">
+                                    {index + 1}
+                                  </div>
+                                  <div className="flex-1">
+                                    <h5 className="font-semibold text-foreground mb-1">
+                                      {activity.title}
+                                    </h5>
+                                    <p className="text-sm text-muted-foreground mb-3">
+                                      {activity.description}
+                                    </p>
+                                    <Button
+                                      size="sm"
+                                      variant={
+                                        activity.completed
+                                          ? "secondary"
+                                          : "default"
+                                      }
+                                      onClick={() =>
+                                        handleActivityComplete(activity.id)
+                                      }
+                                      disabled={activity.completed}
+                                    >
+                                      {activity.completed
+                                        ? "Completado"
+                                        : "Realizar actividad"}
+                                      {activity.completed ? (
+                                        <Sparkles className="w-4 h-4 ml-2" />
+                                      ) : (
+                                        <ArrowRight className="w-4 h-4 ml-2" />
+                                      )}
+                                    </Button>
+                                  </div>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          ),
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Navigation */}
+                  <div className="flex justify-between items-center pt-6 border-t">
+                    <Button variant="outline" onClick={handleResetExploration}>
+                      Cambiar temática
+                    </Button>
+
+                    <div className="flex space-x-3">
+                      {!isStepCompleted && (
+                        <Button variant="outline" onClick={handleCompleteStep}>
+                          Marcar como completado
+                        </Button>
+                      )}
+                      <Button
+                        onClick={handleNextStep}
+                        disabled={
+                          currentStep >= explorationSteps.length - 1 ||
+                          !isStepCompleted
+                        }
+                      >
+                        {currentStep < explorationSteps.length - 1
+                          ? "Siguiente paso"
+                          : "Finalizar exploración"}
+                        <ArrowRight className="w-4 h-4 ml-2" />
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          </div>
         )}
 
         {/* Steps overview */}
