@@ -82,18 +82,18 @@ export default function ImageCarousel() {
     if (!isAutoPlaying) return;
 
     const interval = setInterval(() => {
-      nextSlide();
+      setCurrentSlide((prev) => (prev + 1) % images.length);
     }, 5000); // Change slide every 5 seconds
 
     return () => clearInterval(interval);
-  }, [isAutoPlaying, currentSlide]);
+  }, [isAutoPlaying, images.length]);
 
   const handleMouseEnter = () => setIsAutoPlaying(false);
   const handleMouseLeave = () => setIsAutoPlaying(true);
 
   return (
     <div
-      className="w-full max-w-5xl mx-auto mb-12"
+      className="w-full mb-12"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
@@ -135,16 +135,26 @@ export default function ImageCarousel() {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={prevSlide}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white border-white/30 backdrop-blur-sm"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setIsAutoPlaying(false);
+                  prevSlide();
+                }}
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white border-white/30 backdrop-blur-sm z-10 w-10 h-10 p-0"
               >
                 <ChevronLeft className="w-5 h-5" />
               </Button>
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={nextSlide}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white border-white/30 backdrop-blur-sm"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setIsAutoPlaying(false);
+                  nextSlide();
+                }}
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/20 hover:bg-white/30 text-white border-white/30 backdrop-blur-sm z-10 w-10 h-10 p-0"
               >
                 <ChevronRight className="w-5 h-5" />
               </Button>
@@ -182,10 +192,16 @@ export default function ImageCarousel() {
             {images.map((_, index) => (
               <button
                 key={index}
-                onClick={() => goToSlide(index)}
-                className={`transition-all duration-300 ${
-                  currentSlide === index ? "p-1" : "p-1 hover:opacity-80"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setCurrentSlide(index);
+                  setIsAutoPlaying(false);
+                }}
+                className={`transition-all duration-300 p-2 rounded-full hover:bg-muted ${
+                  currentSlide === index ? "bg-muted/50" : ""
                 }`}
+                aria-label={`Ir a imagen ${index + 1}: ${images[index].title}`}
               >
                 <Circle
                   className={`w-3 h-3 transition-all duration-300 ${
