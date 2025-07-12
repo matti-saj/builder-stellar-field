@@ -32,35 +32,11 @@ interface ExplorationStep {
   location: string;
   type: "map" | "testimony" | "trivia";
   completed: boolean;
-  detailedContent?: string;
-  activities?: Activity[];
-  estimatedTime?: string;
-  keyPoints?: string[];
-  interactiveElements?: InteractiveElement[];
-}
-
-interface Activity {
-  id: string;
-  title: string;
-  description: string;
-  type: "observation" | "listening" | "reflection" | "interaction";
-  completed: boolean;
-}
-
-interface InteractiveElement {
-  id: string;
-  type: "button" | "quiz" | "slider" | "checklist";
-  title: string;
-  content: any;
 }
 
 export default function ExplorationMode() {
   const [selectedTheme, setSelectedTheme] = useState<string | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
-  const [completedSteps, setCompletedSteps] = useState<boolean[]>([]);
-  const [isStepCompleted, setIsStepCompleted] = useState(false);
-  const [showStepContent, setShowStepContent] = useState(false);
-  const [stepProgress, setStepProgress] = useState(0);
 
   const explorationThemes: ExplorationTheme[] = [
     {
@@ -122,161 +98,34 @@ export default function ExplorationMode() {
         {
           id: "1",
           title: "Orígenes Precolombinos",
-          description:
-            "Explora los asentamientos más antiguos de la región y descubre cómo vivían los pueblos originarios",
+          description: "Explora los asentamientos más antiguos de la región",
           location: "Pucará de Tilcara",
           type: "map",
           completed: false,
-          estimatedTime: "8 minutos",
-          detailedContent:
-            "El Pucará de Tilcara fue el centro político y religioso más importante de los tilcaras. Construido estratégicamente en una colina, este asentamiento fortificado controlaba el valle y las rutas comerciales. Sus estructuras de piedra han resistido más de mil años, contando la historia de una civilización avanzada que dominaba la agricultura en terrazas, la metalurgia y el intercambio comercial con pueblos distantes.",
-          keyPoints: [
-            "Arquitectura defensiva estratégica",
-            "Sistema agrícola en terrazas",
-            "Red de intercambio comercial",
-            "Organización social compleja",
-          ],
-          activities: [
-            {
-              id: "a1",
-              title: "Observa las Estructuras",
-              description:
-                "Identifica los elementos defensivos y residenciales en el mapa del pucará",
-              type: "observation",
-              completed: false,
-            },
-            {
-              id: "a2",
-              title: "Imagina la Vida Cotidiana",
-              description:
-                "Reflexiona sobre cómo era un día típico en esta fortaleza hace 1000 años",
-              type: "reflection",
-              completed: false,
-            },
-            {
-              id: "a3",
-              title: "Explora las Rutas",
-              description:
-                "Descubre las conexiones comerciales con otras regiones",
-              type: "interaction",
-              completed: false,
-            },
-          ],
         },
         {
           id: "2",
           title: "Voces Ancestrales",
-          description:
-            "Sumérgete en los testimonios que mantienen viva la memoria oral de los pueblos originarios",
+          description: "Escucha testimonios sobre tradiciones milenarias",
           location: "Testimonios de ancianos",
           type: "testimony",
           completed: false,
-          estimatedTime: "10 minutos",
-          detailedContent:
-            "La tradición oral es el hilo conductor que conecta el pasado con el presente. Los ancianos de las comunidades son los guardianes de historias, rituales, conocimientos medicinales y cosmogónicos que se han transmitido de generación en generación. Cada relato es una ventana al alma de un pueblo que ha sabido preservar su identidad a pesar de los siglos.",
-          keyPoints: [
-            "Transmisión generacional del conocimiento",
-            "Rituales y ceremonias ancestrales",
-            "Medicina tradicional y plantas sagradas",
-            "Cosmogonía andina y relación con la naturaleza",
-          ],
-          activities: [
-            {
-              id: "b1",
-              title: "Escucha Atentamente",
-              description:
-                "Reproduce los testimonios y presta atención a las emociones transmitidas",
-              type: "listening",
-              completed: false,
-            },
-            {
-              id: "b2",
-              title: "Identifica Elementos Culturales",
-              description:
-                "Reconoce referencias a rituales, plantas medicinales y tradiciones",
-              type: "observation",
-              completed: false,
-            },
-            {
-              id: "b3",
-              title: "Reflexiona sobre la Importancia",
-              description:
-                "Considera por qué es crucial preservar estos testimonios orales",
-              type: "reflection",
-              completed: false,
-            },
-          ],
         },
         {
           id: "3",
           title: "El Camino del Inca",
-          description:
-            "Recorre virtualmente las rutas que conectaron el imperio más extenso de América precolombina",
+          description: "Recorre las rutas históricas de comercio andino",
           location: "Quebrada de Humahuaca",
           type: "map",
           completed: false,
-          estimatedTime: "12 minutos",
-          detailedContent:
-            "El Qhapaq Ñan o Camino del Inca es una de las obras de ingeniería más impresionantes de la humanidad. Esta red vial de más de 30,000 kilómetros conectaba todo el imperio incaico desde Colombia hasta Chile. En Jujuy, este camino atraviesa la Quebrada de Humahuaca, uniendo pueblos, culturas y tradiciones. Era más que un simple sendero: era un sistema de comunicación, comercio y control territorial que permitió la expansión y consolidación del Tahuantinsuyu.",
-          keyPoints: [
-            "Red vial de 30,000 kilómetros",
-            "Sistema de chasquis (mensajeros)",
-            "Tambos (postas de descanso)",
-            "Integración de pueblos y culturas",
-          ],
-          activities: [
-            {
-              id: "c1",
-              title: "Sigue la Ruta",
-              description:
-                "Traza el recorrido del camino incaico por la Quebrada de Humahuaca",
-              type: "interaction",
-              completed: false,
-            },
-            {
-              id: "c2",
-              title: "Descubre los Tambos",
-              description:
-                "Localiza las estaciones de descanso y abastecimiento",
-              type: "observation",
-              completed: false,
-            },
-            {
-              id: "c3",
-              title: "Imagina el Intercambio",
-              description:
-                "Reflexiona sobre los productos y conocimientos que se intercambiaban",
-              type: "reflection",
-              completed: false,
-            },
-          ],
         },
         {
           id: "4",
-          title: "Evaluación de Conocimientos",
-          description:
-            "Demuestra lo que has aprendido sobre la rica historia precolombina de Jujuy",
+          title: "Prueba tus Conocimientos",
+          description: "Responde preguntas sobre la historia de Jujuy",
           location: "Trivia Educativa",
           type: "trivia",
           completed: false,
-          estimatedTime: "5 minutos",
-          detailedContent:
-            "Es momento de poner a prueba los conocimientos adquiridos durante esta exploración histórica. Este quiz evalúa tu comprensión sobre los pueblos originarios, sus formas de vida, organización social, y la importancia del patrimonio cultural que han legado a las generaciones actuales.",
-          keyPoints: [
-            "Conocimiento sobre pueblos originarios",
-            "Comprensión de estructuras sociales",
-            "Importancia del patrimonio cultural",
-            "Conexiones históricas",
-          ],
-          activities: [
-            {
-              id: "d1",
-              title: "Responde el Quiz",
-              description: "Contesta preguntas sobre la historia precolombina",
-              type: "interaction",
-              completed: false,
-            },
-          ],
         },
       ],
       geografia: [
@@ -359,57 +208,17 @@ export default function ExplorationMode() {
   const handleStartExploration = (themeId: string) => {
     setSelectedTheme(themeId);
     setCurrentStep(0);
-    setCompletedSteps([]);
-    setIsStepCompleted(false);
-    setShowStepContent(false);
-    setStepProgress(0);
   };
 
   const handleNextStep = () => {
     if (currentStep < explorationSteps.length - 1) {
-      // Mark current step as completed
-      const newCompletedSteps = [...completedSteps];
-      newCompletedSteps[currentStep] = true;
-      setCompletedSteps(newCompletedSteps);
-
       setCurrentStep(currentStep + 1);
-      setIsStepCompleted(false);
-      setShowStepContent(false);
-      setStepProgress(0);
-    }
-  };
-
-  const handleCompleteStep = () => {
-    setIsStepCompleted(true);
-    setStepProgress(100);
-  };
-
-  const handleActivityComplete = (activityId: string) => {
-    const currentStepData = explorationSteps[currentStep];
-    if (currentStepData?.activities) {
-      const totalActivities = currentStepData.activities.length;
-      const completedActivities =
-        currentStepData.activities.filter((a) => a.completed).length + 1;
-      const progress = (completedActivities / totalActivities) * 100;
-      setStepProgress(progress);
-
-      if (progress >= 100) {
-        setIsStepCompleted(true);
-      }
     }
   };
 
   const handleResetExploration = () => {
     setSelectedTheme(null);
     setCurrentStep(0);
-    setCompletedSteps([]);
-    setIsStepCompleted(false);
-    setShowStepContent(false);
-    setStepProgress(0);
-  };
-
-  const toggleStepContent = () => {
-    setShowStepContent(!showStepContent);
   };
 
   const getStepIcon = (type: string) => {
@@ -552,218 +361,48 @@ export default function ExplorationMode() {
 
         {/* Current step */}
         {explorationSteps[currentStep] && (
-          <div className="space-y-6">
-            {/* Main Step Card */}
-            <Card className="overflow-hidden">
-              <CardContent className="p-0">
-                {/* Step Header */}
-                <div className="bg-gradient-to-r from-primary/10 to-cactus/10 p-6 border-b">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-4">
-                      {(() => {
-                        const StepIcon = getStepIcon(
-                          explorationSteps[currentStep].type,
-                        );
-                        return (
-                          <div
-                            className={`${isStepCompleted ? "bg-cactus" : "bg-primary"} text-white rounded-full p-3 transition-colors duration-300`}
-                          >
-                            <StepIcon className="w-6 h-6" />
-                          </div>
-                        );
-                      })()}
-                      <div>
-                        <h3 className="text-2xl font-bold text-foreground mb-1">
-                          {explorationSteps[currentStep].title}
-                        </h3>
-                        <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                          <Badge variant="outline">
-                            📍 {explorationSteps[currentStep].location}
-                          </Badge>
-                          {explorationSteps[currentStep].estimatedTime && (
-                            <span className="flex items-center space-x-1">
-                              <Clock className="w-4 h-4" />
-                              <span>
-                                {explorationSteps[currentStep].estimatedTime}
-                              </span>
-                            </span>
-                          )}
-                        </div>
+          <Card className="mb-8">
+            <CardContent className="p-8">
+              <div className="text-center">
+                <div className="flex items-center justify-center mb-4">
+                  {(() => {
+                    const StepIcon = getStepIcon(
+                      explorationSteps[currentStep].type,
+                    );
+                    return (
+                      <div className="bg-primary text-primary-foreground rounded-full p-4">
+                        <StepIcon className="w-8 h-8" />
                       </div>
-                    </div>
-
-                    {isStepCompleted && (
-                      <div className="flex items-center space-x-2 text-cactus">
-                        <Sparkles className="w-5 h-5" />
-                        <span className="font-medium">Completado</span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Step Progress */}
-                  {stepProgress > 0 && (
-                    <div className="mt-4">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-medium">
-                          Progreso del paso
-                        </span>
-                        <span className="text-sm text-muted-foreground">
-                          {Math.round(stepProgress)}%
-                        </span>
-                      </div>
-                      <div className="w-full bg-muted rounded-full h-2">
-                        <div
-                          className="bg-cactus h-2 rounded-full transition-all duration-500"
-                          style={{ width: `${stepProgress}%` }}
-                        />
-                      </div>
-                    </div>
-                  )}
+                    );
+                  })()}
                 </div>
 
-                {/* Step Content */}
-                <div className="p-6">
-                  <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-                    {explorationSteps[currentStep].description}
-                  </p>
+                <h3 className="text-2xl font-bold text-foreground mb-3">
+                  {explorationSteps[currentStep].title}
+                </h3>
 
-                  {/* Detailed Content Toggle */}
-                  <div className="mb-6">
-                    <Button
-                      variant="outline"
-                      onClick={toggleStepContent}
-                      className="mb-4"
-                    >
-                      {showStepContent
-                        ? "Ocultar detalles"
-                        : "Ver contenido detallado"}
-                      <ArrowRight
-                        className={`w-4 h-4 ml-2 transition-transform ${showStepContent ? "rotate-90" : ""}`}
-                      />
-                    </Button>
+                <p className="text-lg text-muted-foreground mb-4">
+                  {explorationSteps[currentStep].description}
+                </p>
 
-                    {showStepContent &&
-                      explorationSteps[currentStep].detailedContent && (
-                        <Card className="bg-muted/50">
-                          <CardContent className="p-4">
-                            <p className="text-muted-foreground leading-relaxed">
-                              {explorationSteps[currentStep].detailedContent}
-                            </p>
+                <Badge variant="outline" className="mb-6">
+                  📍 {explorationSteps[currentStep].location}
+                </Badge>
 
-                            {/* Key Points */}
-                            {explorationSteps[currentStep].keyPoints && (
-                              <div className="mt-4">
-                                <h4 className="font-semibold text-foreground mb-3">
-                                  Puntos clave:
-                                </h4>
-                                <div className="grid md:grid-cols-2 gap-2">
-                                  {explorationSteps[currentStep].keyPoints?.map(
-                                    (point, index) => (
-                                      <div
-                                        key={index}
-                                        className="flex items-start space-x-2"
-                                      >
-                                        <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
-                                        <span className="text-sm text-muted-foreground">
-                                          {point}
-                                        </span>
-                                      </div>
-                                    ),
-                                  )}
-                                </div>
-                              </div>
-                            )}
-                          </CardContent>
-                        </Card>
-                      )}
-                  </div>
-
-                  {/* Activities */}
-                  {explorationSteps[currentStep].activities && (
-                    <div className="mb-6">
-                      <h4 className="text-lg font-semibold text-foreground mb-4">
-                        Actividades de exploración:
-                      </h4>
-                      <div className="grid md:grid-cols-1 gap-4">
-                        {explorationSteps[currentStep].activities?.map(
-                          (activity, index) => (
-                            <Card
-                              key={activity.id}
-                              className="hover:shadow-md transition-shadow"
-                            >
-                              <CardContent className="p-4">
-                                <div className="flex items-start space-x-3">
-                                  <div className="w-8 h-8 bg-accent text-accent-foreground rounded-full flex items-center justify-center text-sm font-medium">
-                                    {index + 1}
-                                  </div>
-                                  <div className="flex-1">
-                                    <h5 className="font-semibold text-foreground mb-1">
-                                      {activity.title}
-                                    </h5>
-                                    <p className="text-sm text-muted-foreground mb-3">
-                                      {activity.description}
-                                    </p>
-                                    <Button
-                                      size="sm"
-                                      variant={
-                                        activity.completed
-                                          ? "secondary"
-                                          : "default"
-                                      }
-                                      onClick={() =>
-                                        handleActivityComplete(activity.id)
-                                      }
-                                      disabled={activity.completed}
-                                    >
-                                      {activity.completed
-                                        ? "Completado"
-                                        : "Realizar actividad"}
-                                      {activity.completed ? (
-                                        <Sparkles className="w-4 h-4 ml-2" />
-                                      ) : (
-                                        <ArrowRight className="w-4 h-4 ml-2" />
-                                      )}
-                                    </Button>
-                                  </div>
-                                </div>
-                              </CardContent>
-                            </Card>
-                          ),
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Navigation */}
-                  <div className="flex justify-between items-center pt-6 border-t">
-                    <Button variant="outline" onClick={handleResetExploration}>
-                      Cambiar temática
-                    </Button>
-
-                    <div className="flex space-x-3">
-                      {!isStepCompleted && (
-                        <Button variant="outline" onClick={handleCompleteStep}>
-                          Marcar como completado
-                        </Button>
-                      )}
-                      <Button
-                        onClick={handleNextStep}
-                        disabled={
-                          currentStep >= explorationSteps.length - 1 ||
-                          !isStepCompleted
-                        }
-                      >
-                        {currentStep < explorationSteps.length - 1
-                          ? "Siguiente paso"
-                          : "Finalizar exploración"}
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </Button>
-                    </div>
-                  </div>
+                <div className="flex justify-center space-x-4">
+                  <Button
+                    onClick={handleNextStep}
+                    disabled={currentStep >= explorationSteps.length - 1}
+                  >
+                    {currentStep < explorationSteps.length - 1
+                      ? "Siguiente Paso"
+                      : "Completado"}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            </CardContent>
+          </Card>
         )}
 
         {/* Steps overview */}
