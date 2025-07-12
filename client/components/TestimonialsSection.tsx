@@ -22,6 +22,7 @@ interface Testimony {
 export default function TestimonialsSection() {
   const [selectedCommunity, setSelectedCommunity] = useState<string>("todas");
   const [playingAudio, setPlayingAudio] = useState<string | null>(null);
+  const [loadingAudio, setLoadingAudio] = useState<string | null>(null);
   const audioRefs = useRef<{ [key: string]: HTMLAudioElement }>({});
   const synthAudioRefs = useRef<{ [key: string]: { stop: () => void } }>({});
 
@@ -241,63 +242,89 @@ export default function TestimonialsSection() {
 
     // For "Recuerdos de la Quebrada" (audioId "1"), try real audio first
     if (audioId === "1" && testimony.audioUrl.includes("dropbox.com")) {
-      console.log('Playing Dropbox audio for "Recuerdos de la Quebrada"');
-
-      // Create audio element
-      if (!audioRefs.current[audioId]) {
-        const audio = new Audio();
-        audio.preload = "metadata";
-
-        audio.addEventListener("loadstart", () => {
-          console.log("Starting to load audio from Dropbox...");
-        });
-
-        audio.addEventListener("canplay", () => {
-          console.log("Audio ready to play");
-        });
-
-        audio.addEventListener("ended", () => {
-          console.log("Audio playback ended");
-          setPlayingAudio(null);
-        });
-
-        audio.addEventListener("error", (e) => {
-          console.error("Audio loading error:", e);
-          console.log("Error details:", audio.error);
-          setPlayingAudio(null);
-          alert(
-            "No se pudo cargar el audio desde Dropbox. Verifica que el enlace esté disponible públicamente.",
-          );
-          // Fallback to voice simulation
-          setTimeout(() => createVoiceSimulation(audioId, 8), 100);
-        });
-
-        audioRefs.current[audioId] = audio;
-      }
+      console.log('🎵 Playing Dropbox audio for "Recuerdos de la Quebrada"');
 
       const audio = audioRefs.current[audioId];
-      audio.src = testimony.audioUrl;
+      if (!audio) {
+        console.error("Audio element not found");
+        createVoiceSimulation(audioId, 8);
+        return;
+      }
 
-      // First try to load the audio
-      audio.load();
+      // Show loading state immediately
+      setLoadingAudio(audioId);
 
-      // Then try to play
-      const playPromise = audio.play();
-
-      if (playPromise !== undefined) {
-        playPromise
+      // Check if audio is already loaded enough to play
+      if (audio.readyState >= 3) {
+        // HAVE_FUTURE_DATA or better
+        console.log("🚀 Audio already buffered, playing immediately");
+        setLoadingAudio(null);
+        audio
+          .play()
           .then(() => {
-            console.log("Successfully playing Dropbox audio");
             setPlayingAudio(audioId);
           })
           .catch((error) => {
             console.error("Error playing audio:", error);
-            setPlayingAudio(null);
+            setLoadingAudio(null);
             alert(
               "Error al reproducir el audio desde Dropbox. Usando simulación de voz como alternativa.",
             );
             createVoiceSimulation(audioId, 8);
           });
+      } else {
+        console.log("📡 Buffering audio...");
+
+        // Listen for when it's ready to play
+        const onCanPlay = () => {
+          console.log("▶️ Audio ready, starting playback");
+          setLoadingAudio(null);
+          audio.removeEventListener("canplay", onCanPlay);
+          audio
+            .play()
+            .then(() => {
+              setPlayingAudio(audioId);
+            })
+            .catch((error) => {
+              console.error("Error playing audio:", error);
+              setLoadingAudio(null);
+              alert(
+                "Error al reproducir el audio desde Dropbox. Usando simulación de voz como alternativa.",
+              );
+              createVoiceSimulation(audioId, 8);
+            });
+        };
+
+        // Listen for errors
+        const onError = () => {
+          console.error("Error loading audio");
+          setLoadingAudio(null);
+          audio.removeEventListener("canplay", onCanPlay);
+          audio.removeEventListener("error", onError);
+          alert(
+            "No se pudo cargar el audio desde Dropbox. Usando simulación de voz como alternativa.",
+          );
+          createVoiceSimulation(audioId, 8);
+        };
+
+        audio.addEventListener("canplay", onCanPlay);
+        audio.addEventListener("error", onError);
+
+        // Force reload if needed
+        if (audio.readyState === 0) {
+          audio.load();
+        }
+
+        // Timeout after 5 seconds
+        setTimeout(() => {
+          if (loadingAudio === audioId) {
+            console.log("⏰ Audio loading timeout, using fallback");
+            setLoadingAudio(null);
+            audio.removeEventListener("canplay", onCanPlay);
+            audio.removeEventListener("error", onError);
+            createVoiceSimulation(audioId, 8);
+          }
+        }, 5000);
       }
     } else if (audioId === "1") {
       console.log('Using voice simulation for "Recuerdos de la Quebrada"');
@@ -420,8 +447,11 @@ export default function TestimonialsSection() {
                   variant={
                     playingAudio === testimony.id ? "secondary" : "default"
                   }
+                  disabled={loadingAudio === testimony.id}
                 >
-                  {playingAudio === testimony.id ? (
+                  {loadingAudio === testimony.id ? (
+                    <div className="w-5 h-5 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                  ) : playingAudio === testimony.id ? (
                     <Pause className="w-5 h-5" />
                   ) : (
                     <Play className="w-5 h-5" />
@@ -481,11 +511,12 @@ export default function TestimonialsSection() {
           </div>
         )}
 
-        {/* Hidden audio element for Dropbox OPUS file */}
+        {/* Hidden audio element for Dropbox OPUS file with optimized preloading */}
         <audio
           ref={(el) => {
             if (el) {
               audioRefs.current["1"] = el;
+
               // Add event listeners for better control
               el.addEventListener("ended", () => setPlayingAudio(null));
               el.addEventListener("pause", () => {
@@ -493,9 +524,26 @@ export default function TestimonialsSection() {
                   setPlayingAudio(null);
                 }
               });
+
+              // Preload immediately when component mounts
+              el.addEventListener("loadstart", () =>
+                console.log("🔄 Iniciando carga de audio..."),
+              );
+              el.addEventListener("loadedmetadata", () =>
+                console.log("📊 Metadata cargada"),
+              );
+              el.addEventListener("loadeddata", () =>
+                console.log("📁 Datos iniciales cargados"),
+              );
+              el.addEventListener("canplay", () =>
+                console.log("▶️ Audio listo para reproducir"),
+              );
+              el.addEventListener("canplaythrough", () =>
+                console.log("🚀 Audio completamente cargado"),
+              );
             }
           }}
-          preload="metadata"
+          preload="auto"
           style={{ display: "none" }}
         >
           <source
@@ -505,6 +553,10 @@ export default function TestimonialsSection() {
           <source
             src="https://www.dropbox.com/scl/fi/7k7cju1muvvn6rcrkalzv/Recuerdos-de-la-Quebrada.opus?rlkey=76rujvlxu2jvqtu95oy3vzll6&st=pt18dkcs&dl=1"
             type="audio/ogg"
+          />
+          <source
+            src="https://www.dropbox.com/scl/fi/7k7cju1muvvn6rcrkalzv/Recuerdos-de-la-Quebrada.opus?rlkey=76rujvlxu2jvqtu95oy3vzll6&st=pt18dkcs&dl=1"
+            type="audio/mpeg"
           />
         </audio>
       </div>
