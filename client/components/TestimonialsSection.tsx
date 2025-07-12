@@ -190,8 +190,23 @@ export default function TestimonialsSection() {
 
     // Stop any currently playing audio
     if (playingAudio) {
+      // Stop the actual audio element if it exists
+      if (audioRefs.current[playingAudio]) {
+        const currentAudio = audioRefs.current[playingAudio];
+        if (currentAudio.pause) {
+          currentAudio.pause();
+          currentAudio.currentTime = 0;
+        }
+      }
+
+      // If clicking the same audio that's playing, just stop it
+      if (playingAudio === audioId) {
+        setPlayingAudio(null);
+        return;
+      }
+
+      // Otherwise, stop current and continue to play the new one
       setPlayingAudio(null);
-      return;
     }
 
     // For "Recuerdos de la Quebrada" (audioId "1"), try real audio first
