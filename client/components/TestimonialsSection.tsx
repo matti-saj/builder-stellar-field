@@ -23,6 +23,7 @@ export default function TestimonialsSection() {
   const [selectedCommunity, setSelectedCommunity] = useState<string>("todas");
   const [playingAudio, setPlayingAudio] = useState<string | null>(null);
   const audioRefs = useRef<{ [key: string]: HTMLAudioElement }>({});
+  const synthAudioRefs = useRef<{ [key: string]: { stop: () => void } }>({});
 
   const testimonies: Testimony[] = [
     {
@@ -172,12 +173,35 @@ export default function TestimonialsSection() {
 
       source.start();
 
+      // Store reference for stopping
+      synthAudioRefs.current[audioId] = {
+        stop: () => {
+          try {
+            source.stop();
+            gainNode.disconnect();
+            setPlayingAudio(null);
+          } catch (e) {
+            console.log("Audio already stopped");
+          }
+        },
+      };
+
       setPlayingAudio(audioId);
 
-      // Stop after duration
-      setTimeout(() => {
+      // Auto-stop after duration
+      const timeoutId = setTimeout(() => {
+        if (synthAudioRefs.current[audioId]) {
+          delete synthAudioRefs.current[audioId];
+        }
         setPlayingAudio(null);
       }, duration * 1000);
+
+      // Add timeout to the stop function
+      const originalStop = synthAudioRefs.current[audioId].stop;
+      synthAudioRefs.current[audioId].stop = () => {
+        clearTimeout(timeoutId);
+        originalStop();
+      };
     } catch (error) {
       console.error("Error creating voice simulation:", error);
       alert("Audio no disponible en este navegador.");
@@ -190,13 +214,19 @@ export default function TestimonialsSection() {
 
     // Stop any currently playing audio
     if (playingAudio) {
-      // Stop the actual audio element if it exists
+      // Stop HTML audio element if it exists
       if (audioRefs.current[playingAudio]) {
         const currentAudio = audioRefs.current[playingAudio];
         if (currentAudio.pause) {
           currentAudio.pause();
           currentAudio.currentTime = 0;
         }
+      }
+
+      // Stop synthetic audio if it exists
+      if (synthAudioRefs.current[playingAudio]) {
+        synthAudioRefs.current[playingAudio].stop();
+        delete synthAudioRefs.current[playingAudio];
       }
 
       // If clicking the same audio that's playing, just stop it
