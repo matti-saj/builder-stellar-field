@@ -515,7 +515,8 @@ export default function TestimonialsSection() {
           </div>
         )}
 
-        {/* Hidden audio element for Dropbox OPUS file with optimized preloading */}
+        {/* Hidden audio elements for Dropbox OPUS files with optimized preloading */}
+        {/* Audio for "Recuerdos de la Quebrada" */}
         <audio
           ref={(el) => {
             if (el) {
@@ -531,19 +532,21 @@ export default function TestimonialsSection() {
 
               // Preload immediately when component mounts
               el.addEventListener("loadstart", () =>
-                console.log("🔄 Iniciando carga de audio..."),
+                console.log(
+                  "🔄 Iniciando carga de Recuerdos de la Quebrada...",
+                ),
               );
               el.addEventListener("loadedmetadata", () =>
-                console.log("📊 Metadata cargada"),
+                console.log("📊 Metadata cargada (Recuerdos)"),
               );
               el.addEventListener("loadeddata", () =>
-                console.log("📁 Datos iniciales cargados"),
+                console.log("📁 Datos iniciales cargados (Recuerdos)"),
               );
               el.addEventListener("canplay", () =>
-                console.log("▶️ Audio listo para reproducir"),
+                console.log("▶️ Recuerdos listo para reproducir"),
               );
               el.addEventListener("canplaythrough", () =>
-                console.log("🚀 Audio completamente cargado"),
+                console.log("🚀 Recuerdos completamente cargado"),
               );
             }
           }}
@@ -560,6 +563,55 @@ export default function TestimonialsSection() {
           />
           <source
             src="https://www.dropbox.com/scl/fi/7k7cju1muvvn6rcrkalzv/Recuerdos-de-la-Quebrada.opus?rlkey=76rujvlxu2jvqtu95oy3vzll6&st=pt18dkcs&dl=1"
+            type="audio/mpeg"
+          />
+        </audio>
+
+        {/* Audio for "Cantos de la Pachamama" */}
+        <audio
+          ref={(el) => {
+            if (el) {
+              audioRefs.current["3"] = el;
+
+              // Add event listeners for better control
+              el.addEventListener("ended", () => setPlayingAudio(null));
+              el.addEventListener("pause", () => {
+                if (playingAudio === "3") {
+                  setPlayingAudio(null);
+                }
+              });
+
+              // Preload immediately when component mounts
+              el.addEventListener("loadstart", () =>
+                console.log("🔄 Iniciando carga de Cantos de la Pachamama..."),
+              );
+              el.addEventListener("loadedmetadata", () =>
+                console.log("📊 Metadata cargada (Pachamama)"),
+              );
+              el.addEventListener("loadeddata", () =>
+                console.log("📁 Datos iniciales cargados (Pachamama)"),
+              );
+              el.addEventListener("canplay", () =>
+                console.log("▶️ Cantos Pachamama listo para reproducir"),
+              );
+              el.addEventListener("canplaythrough", () =>
+                console.log("🚀 Cantos Pachamama completamente cargado"),
+              );
+            }
+          }}
+          preload="auto"
+          style={{ display: "none" }}
+        >
+          <source
+            src="https://www.dropbox.com/scl/fi/rx4gzrsh95qidoga4wuft/Cantos-Pachamama.opus?rlkey=6j47yvinbgu4xzn9kh1g69sqp&st=m9cfmipe&dl=1"
+            type="audio/opus"
+          />
+          <source
+            src="https://www.dropbox.com/scl/fi/rx4gzrsh95qidoga4wuft/Cantos-Pachamama.opus?rlkey=6j47yvinbgu4xzn9kh1g69sqp&st=m9cfmipe&dl=1"
+            type="audio/ogg"
+          />
+          <source
+            src="https://www.dropbox.com/scl/fi/rx4gzrsh95qidoga4wuft/Cantos-Pachamama.opus?rlkey=6j47yvinbgu4xzn9kh1g69sqp&st=m9cfmipe&dl=1"
             type="audio/mpeg"
           />
         </audio>
