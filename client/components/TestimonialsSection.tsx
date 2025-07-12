@@ -454,7 +454,16 @@ export default function TestimonialsSection() {
         {/* Hidden audio element for Dropbox OPUS file */}
         <audio
           ref={(el) => {
-            if (el) audioRefs.current["1"] = el;
+            if (el) {
+              audioRefs.current["1"] = el;
+              // Add event listeners for better control
+              el.addEventListener("ended", () => setPlayingAudio(null));
+              el.addEventListener("pause", () => {
+                if (playingAudio === "1") {
+                  setPlayingAudio(null);
+                }
+              });
+            }
           }}
           preload="metadata"
           style={{ display: "none" }}
