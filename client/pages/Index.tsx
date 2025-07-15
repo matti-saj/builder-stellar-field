@@ -323,24 +323,16 @@ export default function Index() {
               </ul>
             </div>
 
-            <div>
-              <h4 className="font-semibold text-foreground mb-2">Grupo 10 SystemSpark: La chispa de los sistemas</h4>
+            <div className="space-y-2">
+              <h4 className="font-semibold text-foreground">Grupo 10 · SystemSpark: La chispa de los sistemas</h4>
 
-              <h4 className="font-semibold text-foreground mb-2">Integrantes</h4>
-              <ul className="text-sm text-muted-foreground mb-4 list-disc list-inside">
-                <li>Humacata, Daniel</li>
-                <li>Ibañes, Emanuel</li>
-                <li>Sajama, Maximiliano</li>
-              </ul>
-
-              <h4 className="font-semibold text-foreground mb-2">Colaboradores</h4>
-              <p className="text-sm text-muted-foreground mb-2">
-                Este proyecto fue desarrollado en colaboración con comunidades
-                originarias de Jujuy y organizaciones culturales locales.
+              <h5 className="font-medium text-foreground">Colaboradores</h5>
+              <p className="text-sm text-muted-foreground">
+                Proyecto desarrollado en colaboración con comunidades originarias de Jujuy y organizaciones culturales locales.
               </p>
+
               <p className="text-xs text-muted-foreground">
-                © 2024 Jujuy Interactivo. Contenido cultural protegido por
-                derechos de las comunidades originarias.
+                © 2025 Jujuy Interactivo. Contenido protegido por derechos culturales de las comunidades originarias.
               </p>
             </div>
           </div>
